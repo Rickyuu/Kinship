@@ -1,9 +1,16 @@
 package com.speed.kinship;
 
+import com.speed.kinship.controller.UserHandler;
+import com.speed.kinship.controller.impl.UserHandlerImpl;
+import com.speed.kinship.model.Identity;
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 public class MainActivity extends Activity {
 
@@ -11,6 +18,16 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		View button = findViewById(R.id.button1);
+		button.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				LoginAsyncTask loginAsyncTask = new LoginAsyncTask("ricky", "giveme5", Identity.CHILD);
+				loginAsyncTask.execute();
+			}
+			
+		});
 	}
 
 	@Override
@@ -31,4 +48,34 @@ public class MainActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	private class LoginAsyncTask extends AsyncTask<Void, Void, Boolean> {
+
+		private String username;
+		private String password;
+		private Identity identity;
+		
+		public LoginAsyncTask(String username, String password, Identity identity) {
+			this.username = username;
+			this.password = password;
+			this.identity = identity;
+		}
+		
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			UserHandler userHandler = new UserHandlerImpl();
+			return userHandler.register(username, password, identity);
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			if(result) {
+				Log.i("register ", "succeed!");
+			} else {
+				Log.i("register ", "fail!");
+			}
+		}
+		
+	}
+	
 }

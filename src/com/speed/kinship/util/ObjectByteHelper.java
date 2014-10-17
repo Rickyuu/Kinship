@@ -1,4 +1,4 @@
-package com.speed.kinship.net;
+package com.speed.kinship.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

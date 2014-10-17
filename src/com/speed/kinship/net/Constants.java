@@ -6,7 +6,7 @@ public class Constants implements Serializable {
 
 	private static final long serialVersionUID = 450549763038272826L;
 	// for socket connection
-	public static final String HOST_NAME = "192.168.56.1";
+	public static final String HOST_NAME = "192.168.8.2";
 	public static final int PORT_NUM = 5181;
 	
 	// method name for user handler
