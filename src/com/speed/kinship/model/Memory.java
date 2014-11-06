@@ -6,18 +6,21 @@ import java.util.Date;
 public class Memory implements Serializable {
 
 	private static final long serialVersionUID = 5634620329221051057L;
-	private User user;
+	private int id;
+	private User creator;
 	private String content;
 	private Date time;
 	
-	public Memory(User user, String content, Date time) {
-		this.user = user;
-		this.content = content;
-		this.time = time;
+	public Memory() {
+		
 	}
 	
-	public User getUser() {
-		return user;
+	public int getId() {
+		return id;
+	}
+	
+	public User getCreator() {
+		return creator;
 	}
 	
 	public String getContent() {
@@ -26,6 +29,22 @@ public class Memory implements Serializable {
 	
 	public Date getTime() {
 		return time;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+	
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
+	public void setTime(Date time) {
+		this.time = time;
 	}
 	
 }

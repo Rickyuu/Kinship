@@ -5,18 +5,21 @@ import java.io.Serializable;
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -3146997068513321809L;
-	private String username;
+	private int id;
+	private String userName;
 	private String password;
 	private Identity identity;
 	
-	private User(String username, String password, Identity identity) {
-		this.username = username;
-		this.password = password;
-		this.identity = identity;
+	public User() {
+		
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	public String getUserName() {
-		return username;
+		return userName;
 	}
 	
 	public String getPassword() {
@@ -25,6 +28,22 @@ public class User implements Serializable {
 	
 	public Identity getIdentity() {
 		return identity;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public void setIdentity(Identity identity) {
+		this.identity = identity;
 	}
 	
 }

@@ -6,27 +6,23 @@ import java.util.Date;
 public class State implements Serializable {
 
 	private static final long serialVersionUID = 1331000042887924714L;
-	private User user;
+	private int id;
+	private User creator;
 	private Date time;
 	private String content;
-	private Pic pic;
+	private byte[] pic;
 	private Feedback[] feedbacks;
 	
-	public State(User user, Date time, String content, Pic pic) {
-		this.user = user;
-		this.time = time;
-		this.content = content;
-		this.pic = pic;
+	public State() {
+		
 	}
 	
-	public State(User user, Date time, String content) {
-		this.user = user;
-		this.time = time;
-		this.content = content;
+	public int getId() {
+		return id;
 	}
 	
-	public User getUser() {
-		return user;
+	public User getCreator() {
+		return creator;
 	}
 	
 	public Date getTime() {
@@ -37,12 +33,36 @@ public class State implements Serializable {
 		return content;
 	}
 	
-	public Pic getPic() {
+	public byte[] getPic() {
 		return pic;
 	}
 	
 	public Feedback[] getFeedbacks() {
 		return feedbacks;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+	
+	public void setTime(Date time) {
+		this.time = time;
+	}
+	
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
+	public void setPic(byte[] pic) {
+		this.pic = pic;
+	}
+	
+	public void setFeedbacks(Feedback[] feedbacks) {
+		this.feedbacks = feedbacks;
 	}
 	
 }

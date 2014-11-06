@@ -16,15 +16,15 @@ public class MemoryHandlerImpl implements MemoryHandler {
 	}
 
 	@Override
-	public List<Memory> getNextNMemories(String username, int n) {
+	public List<Memory> getNextNMemories(String username, int startId, int n) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean addMemory(User user, Date time, String content) {
+	public Memory addMemory(User user, Date time, String content) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 }

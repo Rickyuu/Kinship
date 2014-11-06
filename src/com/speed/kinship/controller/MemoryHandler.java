@@ -22,10 +22,11 @@ public interface MemoryHandler {
 	 * get next n memories of this user name
 	 * if the rest memories are less than n, we just return all the rest memories
 	 * @param username
+	 * @param startId
 	 * @param n
 	 * @return
 	 */
-	public List<Memory> getNextNMemories(String username, int n);
+	public List<Memory> getNextNMemories(String username, int startId, int n);
 	
 	/**
 	 * add a new memory for this user
@@ -34,6 +35,6 @@ public interface MemoryHandler {
 	 * @param content
 	 * @return
 	 */
-	public boolean addMemory(User user, Date time, String content);
+	public Memory addMemory(User user, Date time, String content);
 	
 }

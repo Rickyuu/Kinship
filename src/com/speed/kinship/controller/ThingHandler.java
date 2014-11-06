@@ -3,7 +3,6 @@ package com.speed.kinship.controller;
 import java.util.Date;
 import java.util.List;
 
-import com.speed.kinship.model.Pic;
 import com.speed.kinship.model.Thing;
 import com.speed.kinship.model.User;
 
@@ -23,10 +22,11 @@ public interface ThingHandler {
 	 * get next n things of this user name
 	 * if the rest things are less than n, we just return all the rest things
 	 * @param username
+	 * @param startId
 	 * @param n
 	 * @return
 	 */
-	public List<Thing> getNextNThings(String username, int n);
+	public List<Thing> getNextNThings(String username, int startId, int n);
 	
 	/**
 	 * add a new thing for this user
@@ -37,6 +37,6 @@ public interface ThingHandler {
 	 * @param pic
 	 * @return
 	 */
-	public boolean addThing(User user, String title, Date time, String content, Pic pic);
+	public Thing addThing(User user, String title, Date time, String content, byte[] pic);
 	
 }

@@ -6,22 +6,23 @@ import java.util.Date;
 public class Thing implements Serializable {
 
 	private static final long serialVersionUID = -4658380569522122400L;
-	private User user;
+	private int id;
+	private User creator;
 	private String title;
 	private Date time;
 	private String content;
-	private Pic pic;
+	private byte[] pic;
 	
-	public Thing(User user, String title, Date time, String content, Pic pic) {
-		this.user = user;
-		this.title = title;
-		this.time = time;
-		this.content = content;
-		this.pic = pic;
+	public Thing() {
+		
 	}
 	
-	public User getUser() {
-		return user;
+	public int id() {
+		return id;
+	}
+	
+	public User getCreator() {
+		return creator;
 	}
 	
 	public String getTitle() {
@@ -36,8 +37,32 @@ public class Thing implements Serializable {
 		return content;
 	}
 	
-	public Pic getPic() {
+	public byte[] getPic() {
 		return pic;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public void setTime(Date time) {
+		this.time = time;
+	}
+	
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
+	public void setPic(byte[] pic) {
+		this.pic = pic;
 	}
 	
 }

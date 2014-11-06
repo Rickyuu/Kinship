@@ -5,20 +5,36 @@ import java.io.Serializable;
 public class Feedback implements Serializable {
 
 	private static final long serialVersionUID = 4405564064446098693L;
-	private Identity identity;
+	private int id;
+	private User creator;
 	private String content;
 	
-	public Feedback(Identity identity, String content) {
-		this.identity = identity;
-		this.content = content;
+	public Feedback() {
+		
 	}
 	
-	public Identity getIdentity() {
-		return identity;
+	public int getId() {
+		return id;
+	}
+	
+	public User getCreator() {
+		return creator;
 	}
 	
 	public String getContent() {
 		return content;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
+	
+	public void setContent(String content) {
+		this.content = content;
 	}
 	
 }

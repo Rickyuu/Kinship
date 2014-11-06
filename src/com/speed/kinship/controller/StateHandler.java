@@ -3,7 +3,7 @@ package com.speed.kinship.controller;
 import java.util.Date;
 import java.util.List;
 
-import com.speed.kinship.model.Pic;
+import com.speed.kinship.model.Feedback;
 import com.speed.kinship.model.State;
 import com.speed.kinship.model.User;
 
@@ -23,10 +23,11 @@ public interface StateHandler {
 	 * get next n states of this user name
 	 * if the rest states are less than n, we just return all the rest states
 	 * @param username
+	 * @param startId
 	 * @param n
 	 * @return
 	 */
-	public List<State> getNextNStates(String username, int n);
+	public List<State> getNextNStates(String username, int startId, int n);
 	
 	/**
 	 * add a new state for this user
@@ -36,14 +37,15 @@ public interface StateHandler {
 	 * @param pic
 	 * @return
 	 */
-	public boolean addState(User user, Date time, String content, Pic pic);
+	public State addState(User user, Date time, String content, byte[] pic);
 	
 	/**
 	 * add a feedback for the state
-	 * @param state
+	 * @param stateId
+	 * @param feedbackCreator
 	 * @param feedback
 	 * @return
 	 */
-	public boolean addFeedback(State state, String feedback);
+	public Feedback addFeedback(int stateId, User feedbackCreator, String feedback);
 	
 }

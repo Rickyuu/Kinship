@@ -3,6 +3,8 @@ package com.speed.kinship;
 import com.speed.kinship.controller.UserHandler;
 import com.speed.kinship.controller.impl.UserHandlerImpl;
 import com.speed.kinship.model.Identity;
+import com.speed.kinship.model.User;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,7 +51,7 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private class LoginAsyncTask extends AsyncTask<Void, Void, Boolean> {
+	private class LoginAsyncTask extends AsyncTask<Void, Void, User> {
 
 		private String username;
 		private String password;
@@ -62,14 +64,14 @@ public class MainActivity extends Activity {
 		}
 		
 		@Override
-		protected Boolean doInBackground(Void... params) {
+		protected User doInBackground(Void... params) {
 			UserHandler userHandler = new UserHandlerImpl();
 			return userHandler.register(username, password, identity);
 		}
 		
 		@Override
-		protected void onPostExecute(Boolean result) {
-			if(result) {
+		protected void onPostExecute(User result) {
+			if(result != null) {
 				Log.i("register ", "succeed!");
 			} else {
 				Log.i("register ", "fail!");

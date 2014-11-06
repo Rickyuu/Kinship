@@ -1,6 +1,5 @@
 package com.speed.kinship;
 
-import com.speed.kinship.model.Pic;
 import com.speed.kinship.net.Arguments;
 import com.speed.kinship.net.MessageHandler;
 import com.speed.kinship.net.MethodMessage;
@@ -31,8 +30,7 @@ public class PicTestActivity extends Activity {
 				ImageView imageView1 = (ImageView) findViewById(R.id.imageView1);
 				Drawable picDrawable = imageView1.getDrawable();
 				byte[] bytes = PicFormatTools.getInstance().Drawable2Bytes(picDrawable);
-				Pic pic = new Pic(bytes);
-				UploadTask uploadTask = new UploadTask(pic);
+				UploadTask uploadTask = new UploadTask(bytes);
 				uploadTask.execute();
 			}
 			
@@ -40,29 +38,29 @@ public class PicTestActivity extends Activity {
 		
 	}
 	
-	private class UploadTask extends AsyncTask<Void, Void, Pic> {
+	private class UploadTask extends AsyncTask<Void, Void, byte[]> {
 
-		private Pic pic;
+		private byte[] pic;
 		
-		public UploadTask(Pic pic) {
+		public UploadTask(byte[] pic) {
 			this.pic = pic;
 		}
 		
 		@Override
-		protected Pic doInBackground(Void... params) {
+		protected byte[] doInBackground(Void... params) {
 			Arguments arguments = new Arguments();
 			arguments.addArgument("pic", pic);
 			MethodMessage methodMessage = new MethodMessage("uploadpic", arguments);
 			MessageHandler messageHandler = new MessageHandler();
 			Object resultObject = messageHandler.handleMessage(methodMessage);
-			Pic result = (Pic) resultObject;
+			byte[] result = (byte[]) resultObject;
 			return result;
 		}
 		
 		@Override
-		protected void onPostExecute(Pic result) {
+		protected void onPostExecute(byte[] result) {
 			ImageView imageView2 = (ImageView) findViewById(R.id.imageView2);
-			Bitmap bitmap = PicFormatTools.getInstance().Bytes2Bitmap(result.getContent());
+			Bitmap bitmap = PicFormatTools.getInstance().Bytes2Bitmap(result);
 			imageView2.setImageBitmap(bitmap);
 			Log.i("upload", "succeed!");
 		}

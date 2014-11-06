@@ -1,6 +1,7 @@
 package com.speed.kinship.controller;
 
 import com.speed.kinship.model.Identity;
+import com.speed.kinship.model.User;
 
 public interface UserHandler {
 
@@ -11,7 +12,7 @@ public interface UserHandler {
 	 * @param identity
 	 * @return
 	 */
-	public boolean login(String username, String password, Identity identity); 
+	public User login(String username, String password, Identity identity); 
 	
 	/**
 	 * judge if the register legal or illegal
@@ -20,6 +21,6 @@ public interface UserHandler {
 	 * @param identity
 	 * @return
 	 */
-	public boolean register(String username, String password, Identity identity);
+	public User register(String username, String password, Identity identity);
 	
 }
