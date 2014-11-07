@@ -14,15 +14,15 @@ public class ThingHandlerImpl implements ThingHandler {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
-	public List<Thing> getNextNThings(String username, int startId, int n) {
+	public Thing addThing(User user, String title, Date time, String content, byte[] pic) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Thing addThing(User user, String title, Date time, String content, byte[] pic) {
+	public List<Thing> getNextNThings(String username, Date startTime, int n) {
 		// TODO Auto-generated method stub
 		return null;
 	}

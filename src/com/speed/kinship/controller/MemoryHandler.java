@@ -9,24 +9,11 @@ import com.speed.kinship.model.User;
 public interface MemoryHandler {
 
 	/**
-	 * get first n memories of this user name
-	 * this is necessary because we need to refresh sometimes
-	 * if the total memories are less than n, we just return the total memories
+	 * get all the memories of this user name
 	 * @param username
-	 * @param n
 	 * @return
 	 */
-	public List<Memory> getFirstNMemories(String username, int n);
-	
-	/**
-	 * get next n memories of this user name
-	 * if the rest memories are less than n, we just return all the rest memories
-	 * @param username
-	 * @param startId
-	 * @param n
-	 * @return
-	 */
-	public List<Memory> getNextNMemories(String username, int startId, int n);
+	public List<Memory> getAllMemories(String username);
 	
 	/**
 	 * add a new memory for this user

@@ -10,13 +10,7 @@ import com.speed.kinship.model.User;
 public class MemoryHandlerImpl implements MemoryHandler {
 
 	@Override
-	public List<Memory> getFirstNMemories(String username, int n) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Memory> getNextNMemories(String username, int startId, int n) {
+	public List<Memory> getAllMemories(String username) {
 		// TODO Auto-generated method stub
 		return null;
 	}

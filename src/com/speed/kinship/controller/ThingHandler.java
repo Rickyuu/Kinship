@@ -22,11 +22,11 @@ public interface ThingHandler {
 	 * get next n things of this user name
 	 * if the rest things are less than n, we just return all the rest things
 	 * @param username
-	 * @param startId
+	 * @param startTime
 	 * @param n
 	 * @return
 	 */
-	public List<Thing> getNextNThings(String username, int startId, int n);
+	public List<Thing> getNextNThings(String username, Date startTime, int n);
 	
 	/**
 	 * add a new thing for this user

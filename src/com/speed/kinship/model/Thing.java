@@ -17,7 +17,7 @@ public class Thing implements Serializable {
 		
 	}
 	
-	public int id() {
+	public int getId() {
 		return id;
 	}
 	
