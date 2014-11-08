@@ -7,6 +7,7 @@ public interface UserHandler {
 
 	/**
 	 * judge if the login legal or illegal
+	 * if the user does not exist, will return null
 	 * @param username
 	 * @param password
 	 * @param identity
@@ -16,6 +17,9 @@ public interface UserHandler {
 	
 	/**
 	 * judge if the register legal or illegal
+	 * if the user name already be used, will return null
+	 * remember each register will help you register two users, one for you, one for your parent or child
+	 * the returned value will be you
 	 * @param username
 	 * @param password
 	 * @param identity

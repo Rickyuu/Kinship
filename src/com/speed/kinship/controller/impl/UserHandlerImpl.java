@@ -12,8 +12,18 @@ public class UserHandlerImpl implements UserHandler {
 
 	@Override
 	public User login(String username, String password, Identity identity) {
-		// TODO Auto-generated method stub
-		return null;
+		Arguments arguments = new Arguments();
+		arguments.addArgument("username", username);
+		arguments.addArgument("password", password);
+		arguments.addArgument("identity", identity);
+		MethodMessage methodMessage = new MethodMessage(Constants.LOGIN, arguments);
+		MessageHandler messageHandler = new MessageHandler();
+		Object resultObject = messageHandler.handleMessage(methodMessage);
+		if(resultObject == null) {
+			return null;
+		}
+		User result = (User) resultObject;
+		return result;
 	}
 
 	@Override
@@ -25,6 +35,9 @@ public class UserHandlerImpl implements UserHandler {
 		MethodMessage methodMessage = new MethodMessage(Constants.REGISTER, arguments);
 		MessageHandler messageHandler = new MessageHandler();
 		Object resultObject = messageHandler.handleMessage(methodMessage);
+		if(resultObject == null) {
+			return null;
+		}
 		User result = (User) resultObject;
 		return result;
 	}

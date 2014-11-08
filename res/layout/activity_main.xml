@@ -9,17 +9,24 @@
     tools:context="com.speed.kinship.MainActivity" >
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/test_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/test_register_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Button" />
+        android:text="@string/test_register_button" />
+    
+    <Button
+        android:id="@+id/test_state_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/test_register_button"
+        android:text="@string/test_state_button" />
 
 </RelativeLayout>

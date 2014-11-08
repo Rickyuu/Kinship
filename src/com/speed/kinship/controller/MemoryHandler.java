@@ -10,6 +10,9 @@ public interface MemoryHandler {
 
 	/**
 	 * get all the memories of this user name
+	 * the result will be returned with time descent order
+	 * if there is no memory, a memory list of size 0 will be returned
+	 * but please check both null value and list with size 0
 	 * @param username
 	 * @return
 	 */
@@ -17,9 +20,11 @@ public interface MemoryHandler {
 	
 	/**
 	 * add a new memory for this user
-	 * @param user
-	 * @param time
-	 * @param content
+	 * with this function, all the Year part of time will be set to 2014
+	 * we think each date of a different year is just the same memorable date
+	 * @param user current user
+	 * @param time the time of the memorable date(only the part besides year will be remained)
+	 * @param content the description of the memorable date
 	 * @return
 	 */
 	public Memory addMemory(User user, Date time, String content);

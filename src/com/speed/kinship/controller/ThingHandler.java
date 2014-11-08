@@ -12,6 +12,7 @@ public interface ThingHandler {
 	 * get first n things of this user name
 	 * this is necessary because we need to refresh sometimes
 	 * if the total things are less than n, we just return the total things
+	 * the things will be returned by time descent order
 	 * @param username
 	 * @param n
 	 * @return
@@ -21,20 +22,21 @@ public interface ThingHandler {
 	/**
 	 * get next n things of this user name
 	 * if the rest things are less than n, we just return all the rest things
+	 * the things will be returned by time descent order
 	 * @param username
-	 * @param startTime
-	 * @param n
+	 * @param startTime the earliest time of thing you got already
+	 * @param n the number of things you want to get
 	 * @return
 	 */
 	public List<Thing> getNextNThings(String username, Date startTime, int n);
 	
 	/**
 	 * add a new thing for this user
-	 * @param user
-	 * @param title
-	 * @param time
-	 * @param content
-	 * @param pic
+	 * @param user current user
+	 * @param title the title of this thing
+	 * @param time the time of this thing
+	 * @param content the detailed description of this thing
+	 * @param pic the picture of this thing
 	 * @return
 	 */
 	public Thing addThing(User user, String title, Date time, String content, byte[] pic);

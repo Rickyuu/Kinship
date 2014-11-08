@@ -1,8 +1,14 @@
 package com.speed.kinship;
 
+import java.util.Iterator;
+import java.util.List;
+
+import com.speed.kinship.controller.StateHandler;
 import com.speed.kinship.controller.UserHandler;
+import com.speed.kinship.controller.impl.StateHandlerImpl;
 import com.speed.kinship.controller.impl.UserHandlerImpl;
 import com.speed.kinship.model.Identity;
+import com.speed.kinship.model.State;
 import com.speed.kinship.model.User;
 
 import android.app.Activity;
@@ -20,13 +26,23 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		View button = findViewById(R.id.button1);
-		button.setOnClickListener(new OnClickListener() {
+		View test_register_button = findViewById(R.id.test_register_button);
+		test_register_button.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				LoginAsyncTask loginAsyncTask = new LoginAsyncTask("ricky", "giveme5", Identity.CHILD);
-				loginAsyncTask.execute();
+				RegisterAsyncTask registerAsyncTask = new RegisterAsyncTask("rickytest", "17599", Identity.PARENT);
+				registerAsyncTask.execute();
+			}
+			
+		});
+		View test_state_button = findViewById(R.id.test_state_button);
+		test_state_button.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				StateAsyncTask stateAsyncTask = new StateAsyncTask("rickyuu", 10);
+				stateAsyncTask.execute();
 			}
 			
 		});
@@ -51,13 +67,13 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private class LoginAsyncTask extends AsyncTask<Void, Void, User> {
+	private class RegisterAsyncTask extends AsyncTask<Void, Void, User> {
 
 		private String username;
 		private String password;
 		private Identity identity;
 		
-		public LoginAsyncTask(String username, String password, Identity identity) {
+		public RegisterAsyncTask(String username, String password, Identity identity) {
 			this.username = username;
 			this.password = password;
 			this.identity = identity;
@@ -72,9 +88,42 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(User result) {
 			if(result != null) {
-				Log.i("register ", "succeed!");
+				Log.i("register", "succeed!" + " " + result.getId() + " " + result.getUserName() 
+						+ " " + result.getPassword() + " " + result.getIdentity());
 			} else {
-				Log.i("register ", "fail!");
+				Log.i("register", "fail!");
+			}
+		}
+		
+	}
+	
+	private class StateAsyncTask extends AsyncTask<Void, Void, List<State>> {
+
+		private String username;
+		private int n;
+		
+		public StateAsyncTask(String username, int n) {
+			this.username = username;
+			this.n = n;
+		}
+		
+		@Override
+		protected List<State> doInBackground(Void... params) {
+			StateHandler stateHandler = new StateHandlerImpl();
+			return stateHandler.getFirstNStates(username, n);
+		}
+		
+		@Override
+		protected void onPostExecute(List<State> result) {
+			if(result != null) {
+				Iterator<State> iterator = result.iterator();
+				while(iterator.hasNext()) {
+					State state = iterator.next();
+					Log.i("stateGet", "succeed!" + " " + state.getId() + " " + state.getCreator().getUserName() 
+							+ " " + state.getContent() + " " + state.getFeedbacks().length);
+				}
+			} else {
+				Log.i("stateGet", "fail!");
 			}
 		}
 		

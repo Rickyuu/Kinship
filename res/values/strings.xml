@@ -4,5 +4,7 @@
     <string name="app_name">Kinship</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="test_register_button">test_register</string>
+    <string name="test_state_button">test_state</string>
 
 </resources>
