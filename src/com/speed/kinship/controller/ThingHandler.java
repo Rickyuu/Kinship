@@ -41,4 +41,11 @@ public interface ThingHandler {
 	 */
 	public Thing addThing(User user, String title, Date time, String content, byte[] pic);
 	
+	/**
+	 * delete a thing by id
+	 * @param thingId
+	 * @return
+	 */
+	public boolean deleteThing(int thingId);
+	
 }

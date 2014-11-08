@@ -48,4 +48,15 @@ public class MemoryHandlerImpl implements MemoryHandler {
 		return result;
 	}
 
+	@Override
+	public boolean deleteMemory(int memoryId) {
+		Arguments arguments = new Arguments();
+		arguments.addArgument("memoryId", memoryId);
+		MethodMessage methodMessage = new MethodMessage(Constants.DELETE_MEMORY, arguments);
+		MessageHandler messageHandler = new MessageHandler();
+		Object resultObject = messageHandler.handleMessage(methodMessage);
+		boolean result = (boolean) resultObject;
+		return result;
+	}
+
 }

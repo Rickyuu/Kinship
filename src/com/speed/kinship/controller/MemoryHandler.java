@@ -29,4 +29,11 @@ public interface MemoryHandler {
 	 */
 	public Memory addMemory(User user, Date time, String content);
 	
+	/**
+	 * delete a memorable date by its id
+	 * @param memoryId the id of the memorable date to be deleted
+	 * @return
+	 */
+	public boolean deleteMemory(int memoryId);
+	
 }

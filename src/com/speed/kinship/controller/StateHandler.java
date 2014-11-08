@@ -49,4 +49,20 @@ public interface StateHandler {
 	 */
 	public Feedback addFeedback(int stateId, User feedbackCreator, String feedback);
 	
+	/**
+	 * delete a state by id, and all the feedbacks of this state will be deleted together
+	 * there is no need to delete the feedbacks of this state by yourself
+	 * @param stateId
+	 * @return
+	 */
+	public boolean deleteState(int stateId);
+	
+	/**
+	 * delete a feedback by id
+	 * please be sure this feedback is created by this user if you want to delete a feedback
+	 * @param feedbackId
+	 * @return
+	 */
+	public boolean deleteFeedback(int feedbackId);
+	
 }

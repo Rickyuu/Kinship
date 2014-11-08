@@ -46,6 +46,16 @@ public class MainActivity extends Activity {
 			}
 			
 		});
+		View test_delete_state_button = findViewById(R.id.test_delete_state_button);
+		test_delete_state_button.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				DeleteStateAsyncTask deleteStateAsyncTask = new DeleteStateAsyncTask(13);
+				deleteStateAsyncTask.execute();
+			}
+			
+		});
 	}
 
 	@Override
@@ -124,6 +134,31 @@ public class MainActivity extends Activity {
 				}
 			} else {
 				Log.i("stateGet", "fail!");
+			}
+		}
+		
+	}
+	
+	private class DeleteStateAsyncTask extends AsyncTask<Void, Void, Boolean> {
+
+		private int stateId;
+		
+		public DeleteStateAsyncTask(int stateId) {
+			this.stateId = stateId;
+		}
+		
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			StateHandler stateHandler = new StateHandlerImpl();
+			return stateHandler.deleteState(stateId);
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			if(result == true) {
+				Log.i("stateDelete", "succeed!");
+			} else {
+				Log.i("stateDelete", "fail!");
 			}
 		}
 		

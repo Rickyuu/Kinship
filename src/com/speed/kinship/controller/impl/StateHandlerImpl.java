@@ -78,4 +78,26 @@ public class StateHandlerImpl implements StateHandler {
 		return result;
 	}
 
+	@Override
+	public boolean deleteState(int stateId) {
+		Arguments arguments = new Arguments();
+		arguments.addArgument("stateId", stateId);
+		MethodMessage methodMessage = new MethodMessage(Constants.DELETE_STATE, arguments);
+		MessageHandler messageHandler = new MessageHandler();
+		Object resultObject = messageHandler.handleMessage(methodMessage);
+		boolean result = (boolean) resultObject;
+		return result;
+	}
+
+	@Override
+	public boolean deleteFeedback(int feedbackId) {
+		Arguments arguments = new Arguments();
+		arguments.addArgument("feedbackId", feedbackId);
+		MethodMessage methodMessage = new MethodMessage(Constants.DELETE_FEEDBACK, arguments);
+		MessageHandler messageHandler = new MessageHandler();
+		Object resultObject = messageHandler.handleMessage(methodMessage);
+		boolean result = (boolean) resultObject;
+		return result;
+	}
+
 }

@@ -28,5 +28,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/test_register_button"
         android:text="@string/test_state_button" />
+    
+    <Button
+        android:id="@+id/test_delete_state_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/test_state_button"
+        android:text="@string/test_delete_state_button" />
 
 </RelativeLayout>

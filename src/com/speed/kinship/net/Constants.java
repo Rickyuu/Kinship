@@ -17,12 +17,16 @@ public class Constants implements Serializable {
 	public static final String GET_NEXT_N_STATES = "getNextNStates";
 	public static final String ADD_STATE = "addState";
 	public static final String ADD_FEEDBACK = "addFeedback";
+	public static final String DELETE_STATE = "deleteState";
+	public static final String DELETE_FEEDBACK = "deleteFeedback";
 	// method name for thing handler
 	public static final String GET_FIRST_N_THINGS = "getFirstNThings";
 	public static final String GET_NEXT_N_THINGS = "getNextNThings";
 	public static final String ADD_THING = "addThing";
+	public static final String DELETE_THING = "deleteThing";
 	// method name for memory handler
 	public static final String GET_ALL_MEMORIES = "getAllMemories";
 	public static final String ADD_MEMORY = "addMemory";
+	public static final String DELETE_MEMORY = "deleteMemory";
 	
 }

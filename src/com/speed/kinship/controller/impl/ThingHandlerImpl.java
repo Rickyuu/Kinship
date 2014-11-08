@@ -64,4 +64,15 @@ public class ThingHandlerImpl implements ThingHandler {
 		return result;
 	}
 
+	@Override
+	public boolean deleteThing(int thingId) {
+		Arguments arguments = new Arguments();
+		arguments.addArgument("thingId", thingId);
+		MethodMessage methodMessage = new MethodMessage(Constants.DELETE_THING, arguments);
+		MessageHandler messageHandler = new MessageHandler();
+		Object resultObject = messageHandler.handleMessage(methodMessage);
+		boolean result = (boolean) resultObject;
+		return result;
+	}
+
 }

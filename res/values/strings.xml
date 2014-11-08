@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="test_register_button">test_register</string>
     <string name="test_state_button">test_state</string>
+    <string name="test_delete_state_button">test_delete_state</string>
 
 </resources>
