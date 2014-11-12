@@ -10,7 +10,7 @@ public class Arguments implements Serializable {
 	private Map<String, Object> params;
 	
 	public Arguments() {
-		params = new HashMap<>();
+		params = new HashMap<String, Object>();
 	}
 	
 	public void addArgument(String name, Object value) {
