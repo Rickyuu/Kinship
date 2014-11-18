@@ -13,7 +13,7 @@
         android:layout_alignParentRight="true" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/create"
             android:layout_width="1px"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -80,6 +80,7 @@ public class LoginActivity extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent=new Intent();
 				intent.setClass(LoginActivity.this, RegisterActivity.class);
+				startActivity(intent);
 			}
 			
 		});

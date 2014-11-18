@@ -15,7 +15,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/newAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textView1"
@@ -37,20 +37,20 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/newPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textView2"
-        android:layout_alignLeft="@+id/editText1"
+        android:layout_alignLeft="@+id/newAccount"
         android:ems="10"
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/editText2"
-        android:layout_below="@+id/editText2"
+        android:layout_alignRight="@+id/newPassword"
+        android:layout_below="@+id/newPassword"
         android:layout_marginTop="137dp"
         android:text="Create" />
 
