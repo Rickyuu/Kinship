@@ -48,7 +48,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/linearLayout1"
         android:layout_below="@+id/imageButton1"
-        android:layout_centerHorizontal="true" >
+        android:layout_centerHorizontal="true" 
+        >
 
     </ListView>
 

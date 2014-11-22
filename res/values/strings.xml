@@ -7,5 +7,6 @@
     <string name="test_register_button">test_register</string>
     <string name="test_state_button">test_state</string>
     <string name="test_delete_state_button">test_delete_state</string>
+    <string name="textView_loadingFooter">\nLoading...\n</string>
 
 </resources>
