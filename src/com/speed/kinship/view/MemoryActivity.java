@@ -1,7 +1,229 @@
 package com.speed.kinship.view;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import com.speed.kinship.controller.MemoryHandler;
+import com.speed.kinship.controller.impl.MemoryHandlerImpl;
+import com.speed.kinship.model.Memory;
+
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 public class MemoryActivity extends Activity {
+	private ImageButton setting;
+	private ImageButton add;
+	private ListView memoryList;
+	private Button timeLine;
+	private Button state;
+	private Button memory;
+	private myAdapter mAdapter;
+	private ArrayList<HashMap<String, String>>  myList=new ArrayList<HashMap<String, String>>();
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.memory);
+		setting=(ImageButton) findViewById(R.id.settingInMemory);
+		add=(ImageButton) findViewById(R.id.addMemory);
+		memoryList=(ListView) findViewById(R.id.memoryList);
+		timeLine=(Button) findViewById(R.id.timeLine3);
+		state=(Button) findViewById(R.id.state3);
+		memory=(Button) findViewById(R.id.memory3);
+		getMemoryAsyncTask getMemory=new getMemoryAsyncTask();
+		getMemory.execute( );
+		mAdapter = new myAdapter(MemoryActivity.this);
+		memoryList.setAdapter(mAdapter);
+		add.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent=new Intent();
+				intent.setClass(MemoryActivity.this, MemoryCreateActivity.class);
+			}
+			
+		});
+		timeLine.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent=new Intent();
+				intent.setClass(MemoryActivity.this, ThingActivity.class);
+				startActivity(intent);
+			}
+			
+			
+		});
+		state.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent=new Intent();
+				intent.setClass(MemoryActivity.this, StateActivity.class);
+				startActivity(intent);
+			}
+		});	
+		memory.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent=new Intent();
+				intent.setClass(MemoryActivity.this, MemoryActivity.class);
+				startActivity(intent);
+			}
+			
+			
+		});
+		
+	}
+	
+	private class getMemoryAsyncTask extends AsyncTask<Void,Void,List<Memory>> {
+		
+
+		public getMemoryAsyncTask() {
+			
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected List<Memory> doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			MemoryHandler memoryHandler=new MemoryHandlerImpl();
+			return memoryHandler.getAllMemories("tttty");
+		}
+
+		@Override
+		protected void onPostExecute(List<Memory> result) {
+			// TODO Auto-generated method stub
+			for(Memory temp:result) {
+				HashMap<String, String> hm=new HashMap<String,String>();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String str=sdf.format(temp.getTime());
+				hm.put("content", temp.getContent());
+				hm.put("id", String.valueOf(temp.getId()));
+				hm.put("username", temp.getCreator().getUserName());
+				hm.put("time", str);
+				myList.add(hm);
+			}
+			
+		}
+		
+	}
+	public final class ViewHolder{
+		public TextView Time;
+		public TextView Content;
+		public ImageButton Delete;
+	}
+	private class myAdapter extends BaseAdapter {
+		
+		private LayoutInflater mInflater;
+		
+
+		public myAdapter(Context context) {
+			this.mInflater=LayoutInflater.from(context);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return myList.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			// TODO Auto-generated method stub
+			ViewHolder holder=null;
+			if(convertView==null) {
+				holder=new ViewHolder();
+				convertView=mInflater.inflate(R.layout.memroyitemlayout, null);
+				holder.Content=(TextView) convertView.findViewById(R.id.memoryContent);
+				holder.Time=(TextView) convertView.findViewById(R.id.memoryTime);
+				holder.Delete=(ImageButton) convertView.findViewById(R.id.memoryDelete);
+				convertView.setTag(holder);
+			} else {
+				holder=(ViewHolder) convertView.getTag();
+			}
+			holder.Content.setText(myList.get(position).get("content"));
+			holder.Time.setText(myList.get(position).get("time"));
+			final int deletePosition=Integer.parseInt(myList.get(position).get("id"));
+			holder.Delete.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					
+					deleteMemoryAsyncTask deleteMemory=new deleteMemoryAsyncTask(deletePosition);
+					deleteMemory.execute( );
+					mAdapter.notifyDataSetChanged();
+					
+				}
+				
+			});
+			return convertView;
+		}
+		
+	}
+	private class deleteMemoryAsyncTask extends AsyncTask<Void,Void,Boolean> {
+		
+		private int memoryId;
+		
+
+		public deleteMemoryAsyncTask(int memoryId) {
+			super();
+			this.memoryId = memoryId;
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			MemoryHandler memoryHandler=new MemoryHandlerImpl();
+			return memoryHandler.deleteMemory(memoryId);
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			// TODO Auto-generated method stub
+			if(result==true) {
+				Log.i("DeleteMemory", "Success");
+			} else {
+				Log.i("DeleteMemory","Fail");
+			}
+		}
+		
+	}
 
 }

@@ -67,7 +67,10 @@ public class LoginActivity extends Activity {
 				LoginAsyncTask loginAsyncTask=new LoginAsyncTask(userName,password,identity);
 				loginAsyncTask.execute( );
 				Intent intent=new Intent();
+				intent.putExtra("username", account.getText().toString());
+				intent.putExtra("identity", identity);
 				intent.setClass(LoginActivity.this, LoginingActivity.class);
+				
 				startActivity(intent);
 			}
 			

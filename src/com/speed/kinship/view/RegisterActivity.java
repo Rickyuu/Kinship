@@ -25,9 +25,9 @@ public class RegisterActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.register);
-		newAccount=(EditText) findViewById(R.id.newAccount);
-		newPassword=(EditText) findViewById(R.id.newPassword);
-		register=(Button) findViewById(R.id.create);
+		newAccount=(EditText) findViewById(R.id.thingEditTime);
+		newPassword=(EditText) findViewById(R.id.thingEditTitle);
+		register=(Button) findViewById(R.id.timeLine);
 		register.setOnClickListener(new OnClickListener() {
 			String account=null;
 			String password=null;
