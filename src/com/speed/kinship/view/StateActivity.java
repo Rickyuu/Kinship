@@ -13,15 +13,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Scroller;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -31,9 +36,8 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.speed.kinship.controller.UserHandler;
 import com.speed.kinship.controller.impl.StateHandlerImpl;
-import com.speed.kinship.controller.impl.UserHandlerImpl;
+import com.speed.kinship.model.Feedback;
 import com.speed.kinship.model.Identity;
 import com.speed.kinship.model.State;
 import com.speed.kinship.model.User;
@@ -45,7 +49,7 @@ public class StateActivity extends Activity{
 	private ListView list;
 	private View listFooter;
 	private Button timeline;
-	//private Button status;
+	private Button status;
 	private Button memory;
 	
 	private String username;
@@ -53,7 +57,7 @@ public class StateActivity extends Activity{
 	private String identity;
 	
 	private int startid;
-	private SimpleAdapter mSchedule;
+	private stateAdapter mSchedule;
 	ArrayList<HashMap<String, Object>> stlist;
 	
 	@Override
@@ -68,8 +72,10 @@ public class StateActivity extends Activity{
         listFooter = layoutInflater.inflate(R.layout.loadingfooter, null);
         create = (ImageButton) findViewById(R.id.imageButton1);
         timeline = (Button) findViewById(R.id.button2);
-        //status = (Button) findViewById(R.id.create);
+        status = (Button) findViewById(R.id.create);
         memory = (Button) findViewById(R.id.button3);
+        //status.setClickable(false);
+        //status.setSelected(true);
         
         /*Intent intent = getIntent();
         Bundle b = intent.getExtras();
@@ -82,14 +88,11 @@ public class StateActivity extends Activity{
         setStartid(-1);
         stlist = new ArrayList<HashMap<String, Object>>();
         
-        mSchedule = new SimpleAdapter(this, 
-				  	stlist,//数据来源 
-				  	R.layout.stateitem,//ListItem的XML实现
-				  	new String[] {"userName", "content", "time"}, //动态数组与ListItem对应的子项 
-				  	new int[] {R.id.ItemUser,R.id.ItemText,R.id.ItemTime}); //ListItem的XML文件里面的两个TextView ID  	
+        mSchedule = new stateAdapter(this, stlist);
 
         list.addFooterView(listFooter);
         list.setAdapter(mSchedule);//添加并且显示
+        //list.setVisibility(View.INVISIBLE);
         
         GetStateAsyncTask stateTask = new GetStateAsyncTask();
         stateTask.execute();
@@ -104,6 +107,7 @@ public class StateActivity extends Activity{
         		data.putString("identity", identity);
         		Intent intent = new Intent(StateActivity.this, StateCreateActivity.class);
         		intent.putExtras(data);
+        		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         		startActivity(intent);
         	}
         });
@@ -118,7 +122,17 @@ public class StateActivity extends Activity{
         		data.putString("identity", identity);
         		Intent intent = new Intent(StateActivity.this, ThingActivity.class);
         		intent.putExtras(data);
+        		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         		startActivity(intent);
+        	}
+        });
+        
+        status.setOnClickListener(new OnClickListener(){
+        	//跳转到StateCreate
+        	@Override
+        	public void onClick(View v){
+        		refreshStateAsyncTask stateTask = new refreshStateAsyncTask();
+                stateTask.execute();
         	}
         });
         
@@ -132,6 +146,7 @@ public class StateActivity extends Activity{
         		data.putString("identity", identity);
         		Intent intent = new Intent(StateActivity.this, MemoryActivity.class);
         		intent.putExtras(data);
+        		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         		startActivity(intent);
         	}
         });
@@ -189,10 +204,43 @@ public class StateActivity extends Activity{
 				for (; it.hasNext();) {
 					ob = it.next();
 					map = new HashMap<String, Object>(); 
-					map.put("userName", ob.getCreator().getUserName());  
+					if(ob.getCreator().getId() == Integer.parseInt(id)){
+						map.put("username", "Me");
+					}else{
+						if(ob.getCreator().getId()%2 == 1){
+							map.put("username", "Mom and Dad");
+						}else{
+							map.put("username", "Child");
+						}
+					} 
 					map.put("content", ob.getContent());
 					DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 					map.put("time", format1.format(ob.getTime())); 
+					map.put("stateId", Integer.toString(ob.getId()));
+					if(ob.getFeedbacks() != null){
+						feedbackList replies = new feedbackList();
+						HashMap<String, Object> feedmap = null;
+						for(int i=0; i<(ob.getFeedbacks().length); i++){
+							feedmap = new HashMap<String, Object>();
+							String fbCreator;
+							if(ob.getFeedbacks()[i].getCreator().getId() == Integer.parseInt(id)){
+								fbCreator = "Me";
+							}else{
+								if(ob.getFeedbacks()[i].getCreator().getId()%2 == 1){
+									fbCreator = "Mom and Dad";
+								}else{
+									fbCreator = "Child";
+								}
+							} 
+							//map.put("username", ob.getFeedbacks()[i].getCreator().getUserName());
+							feedmap.put("content", fbCreator+" : "+ob.getFeedbacks()[i].getContent());
+							replies.feedback.add(feedmap);
+							map.put("feedbacks", replies);
+							//#D3D3D3
+						}
+					}else{
+						map.put("feedbacks", null);
+					}
 					stlist.add(map);  
 				} 
 				setStartid(ob.getId());
@@ -231,21 +279,49 @@ public class StateActivity extends Activity{
 				for (; it.hasNext();) {
 					ob = it.next();
 					map = new HashMap<String, Object>(); 
-					map.put("userName", ob.getCreator().getUserName());  
+					if(ob.getCreator().getId() == Integer.parseInt(id)){
+						map.put("username", "Me");
+					}else{
+						if(ob.getCreator().getId()%2 == 1){
+							map.put("username", "Mom and Dad");
+						}else{
+							map.put("username", "Child");
+						}
+					} 
 					map.put("content", ob.getContent());
 					DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 					map.put("time", format1.format(ob.getTime())); 
+					map.put("stateId", Integer.toString(ob.getId()));
+					if(ob.getFeedbacks() != null){
+						feedbackList replies = new feedbackList();
+						HashMap<String, Object> feedmap = null;
+						for(int i=0; i<(ob.getFeedbacks().length); i++){
+							feedmap = new HashMap<String, Object>();String fbCreator;
+							if(ob.getFeedbacks()[i].getCreator().getId() == Integer.parseInt(id)){
+								fbCreator = "Me";
+							}else{
+								if(ob.getFeedbacks()[i].getCreator().getId()%2 == 1){
+									fbCreator = "Mom and Dad";
+								}else{
+									fbCreator = "Child";
+								}
+							} 
+							//map.put("username", ob.getFeedbacks()[i].getCreator().getUserName());
+							feedmap.put("content", fbCreator+" : "+ob.getFeedbacks()[i].getContent());
+							replies.feedback.add(feedmap);
+							map.put("feedbacks", replies);
+							//#D3D3D3
+						}
+					}else{
+						map.put("feedbacks", null);
+					}
 					stlist.add(map);  
 				} 
 				setStartid(ob.getId());
+				mSchedule.notifyDataSetChanged();
 			}else{
 				;
 			}
-			if(stlist != null){
-				mSchedule.notifyDataSetChanged();
-	        }else{
-	        	;
-	        }
 			list.removeHeaderView(listFooter);
 		}
 		
@@ -255,4 +331,171 @@ public class StateActivity extends Activity{
 		startid = i;
 	}
 	
+	public class stateAdapter extends BaseAdapter{
+		
+		private Context context;
+		private LayoutInflater inflater;
+		private ArrayList<HashMap<String, Object>> arrayList;
+		private HashMap<String, Object> item;
+		
+		public stateAdapter(Context context, ArrayList<HashMap<String, Object>> arrayList){
+			this.context = context;
+			this.arrayList = arrayList;
+			this.inflater = LayoutInflater.from(this.context);
+		}
+		
+		public class ViewHolder {  
+	        public TextView username;  
+	        public TextView content;
+	        public TextView time;
+	        public ImageButton delete;
+	        public ImageButton comment;
+	        public ListView replies;
+	    }  
+		
+		@Override
+		public int getCount() {
+			return arrayList.size();
+		}
+		@Override
+		public Object getItem(int position) {
+			return arrayList.get(position);
+		}
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder holder = null;  
+	        //if (convertView == null) {  
+	            convertView = inflater.inflate(R.layout.semistateitem, null);  
+	  
+	            holder = new ViewHolder();  
+	            holder.username = (TextView) convertView.findViewById(R.id.ItemUser);  
+	            holder.content = (TextView) convertView.findViewById(R.id.ItemText);  
+	            holder.time = (TextView) convertView.findViewById(R.id.ItemTime);  
+	            holder.delete = (ImageButton) convertView.findViewById(R.id.imageButtonDe);
+	            holder.comment = (ImageButton) convertView.findViewById(R.id.imageButtonRe);
+	            holder.replies = (ListView) convertView.findViewById(R.id.listViewReplies);
+	            convertView.setTag(holder);  
+	        //} else {  
+	        //    holder = (ViewHolder) convertView.getTag();  
+	        //}  
+	  
+	        item = arrayList.get(position);  
+	        holder.username.setText((String)item.get("username"));  
+	        holder.content.setText((String)item.get("content"));
+	        holder.time.setText((String)item.get("time"));
+	        //此处添加评论区设置
+	        if(item.get("feedbacks")!=null){
+	        	SimpleAdapter mSchedule = new SimpleAdapter(context, ((feedbackList)item.get("feedbacks")).feedback, R.layout.statereply, new String[]{"content"}, new int[]{R.id.stateReply});
+
+	            holder.replies.setAdapter(mSchedule);
+	            setListViewHeightBasedOnChildren(holder.replies);
+	        }else{
+	        	holder.replies.setVisibility(View.INVISIBLE);
+	        }
+	        
+	        holder.comment.setOnClickListener(new OnClickListener() { 
+	        	final String stateid = (String)item.get("stateId");
+	  
+	            @Override  
+	            public void onClick(View v) {  
+	                //跳转到回复页面
+	            	Log.e("ClickState", "ClickComment");
+	            	Bundle data = new Bundle();
+	        		data.putString("username",username);
+	        		data.putString("id", id);
+	        		data.putString("stateId", stateid);
+	        		data.putString("identity", identity);
+	        		Intent intent = new Intent(StateActivity.this, FeedbackCreate.class);
+	        		intent.putExtras(data);
+	        		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	        		startActivity(intent);
+	                // notifyDataSetChanged();  
+	            }  
+	        });
+	        
+	        if(item.get("username") == "Me"){
+	        	final int itemPosition = position;
+	        	final int stateid = Integer.parseInt((String)item.get("stateId"));
+	        	final stateAdapter present = this;
+	        	holder.delete.setOnClickListener(new OnClickListener() {
+	        		
+	        		@Override
+	        		public void onClick(View v){
+	        			//TODO
+	        			Log.e("ClickState", "ClickDelete");
+	        			deleteStateAsyncTask deleteTask = new deleteStateAsyncTask(stateid, itemPosition);
+	        			deleteTask.execute();
+	        		}
+	        	});
+	        }else{
+	        	//holder.delete.setClickable(false);
+	        	holder.delete.setVisibility(View.INVISIBLE);
+	        }
+	  
+	        return convertView;  
+	    }
+		
+		private class deleteStateAsyncTask extends AsyncTask<Void, Void, Boolean> {
+			
+			private int stateId;
+			private int position;
+			
+			public deleteStateAsyncTask(int stateid, int position){
+				this.stateId = stateid;
+				this.position = position;
+			}
+			
+			@Override
+			protected Boolean doInBackground(Void... params) {
+				StateHandlerImpl StateHler = new StateHandlerImpl();
+		        boolean result = StateHler.deleteState(stateId);
+		        if(result == true){
+					arrayList.remove(position);
+				}else{
+					Log.e("DeleteState","Failed");
+				}
+		        return (new Boolean(result));
+			}
+			
+			@Override
+			protected void onPostExecute(Boolean result) {
+				mSchedule.notifyDataSetChanged();
+			}
+			
+		}
+	}
+	
+	public static void setListViewHeightBasedOnChildren(ListView listView) { 
+	    if(listView == null) return;
+
+	    ListAdapter listAdapter = listView.getAdapter(); 
+	    if (listAdapter == null) { 
+	        // pre-condition 
+	        return; 
+	    } 
+
+	    int totalHeight = 0; 
+	    for (int i = 0; i < listAdapter.getCount(); i++) { 
+	        View listItem = listAdapter.getView(i, null, listView); 
+	        listItem.measure(0, 0); 
+	        totalHeight += listItem.getMeasuredHeight(); 
+	    } 
+
+	    ViewGroup.LayoutParams params = listView.getLayoutParams(); 
+	    params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1)); 
+	    listView.setLayoutParams(params); 
+	}
+}
+
+class feedbackList{
+	public ArrayList<HashMap<String, Object>> feedback;
+	
+	public feedbackList(){
+		feedback = new ArrayList<HashMap<String, Object>>();
+	}
 }
