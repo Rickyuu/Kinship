@@ -112,6 +112,21 @@ public class StateActivity extends Activity{
         	}
         });
         
+        setting.setOnClickListener(new OnClickListener(){
+        	//跳转到StateCreate
+        	@Override
+        	public void onClick(View v){
+        		Bundle data = new Bundle();
+        		data.putString("username",username);
+        		data.putString("id", id);
+        		data.putString("identity", identity);
+        		Intent intent = new Intent(StateActivity.this, settingActivity.class);
+        		intent.putExtras(data);
+        		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        		startActivity(intent);
+        	}
+        });
+        
         timeline.setOnClickListener(new OnClickListener(){
         	//跳转到StateCreate
         	@Override
