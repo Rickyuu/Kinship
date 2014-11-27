@@ -54,7 +54,6 @@
         android:layout_below="@+id/imageButton1"
         android:layout_centerHorizontal="true" 
         >
-
     </ListView>
 
     <ImageButton

@@ -29,6 +29,7 @@ public class LoginActivity extends Activity {
 	private int identity;
 	private String userName=null;
 	private String password=null;
+	private User user;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,11 @@ public class LoginActivity extends Activity {
 				LoginAsyncTask loginAsyncTask=new LoginAsyncTask(userName,password,identity);
 				loginAsyncTask.execute( );
 				Intent intent=new Intent();
+//				intent.putExtra("userName", user.getUserName());
+//				intent.putExtra("identity", user.getIdentity());
+//				intent.putExtra("id", String.valueOf(user.getId()));
 				intent.setClass(LoginActivity.this, LoginingActivity.class);
+				
 				startActivity(intent);
 			}
 			
@@ -105,16 +110,19 @@ public class LoginActivity extends Activity {
 			if(identity==1) {
 				return userHandler.login(username, password, Identity.PARENT);
 			}
-			if(identity==0) {
+			else if(identity==0) {
 				return userHandler.login(username, password, Identity.CHILD);
+			} else {
+				return null;
 			}
-			return null;
+			
 		}
 
 		@Override
 		protected void onPostExecute(User result) {
 			// TODO Auto-generated method stub
 			if(result!=null) {
+				LoginActivity.this.user=result;
 				Log.i("Login", "Succeed!");
 			} else {
 				Log.i("Login", "Fail!");

@@ -5,7 +5,7 @@
     android:background="@drawable/background" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/memoryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -15,40 +15,43 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/memoryTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/memoryTitle"
         android:layout_marginTop="55dp"
         android:text="Date"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/newAccount"
+        android:id="@+id/memoryEditTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textView2"
+        android:layout_above="@+id/memoryTime"
         android:layout_marginLeft="30dp"
-        android:layout_toRightOf="@+id/textView1"
+        android:layout_toRightOf="@+id/memoryTitle"
         android:ems="10" />
 
-    <EditText
-        android:id="@+id/newPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_alignLeft="@+id/newAccount"
-        android:ems="10"
-        android:inputType="date" />
-
     <Button
-        android:id="@+id/create"
+        android:id="@+id/memoryPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/newPassword"
-        android:layout_below="@+id/newPassword"
+        android:layout_alignRight="@+id/memoryEditTime"
+        android:layout_below="@+id/memoryEditTime"
         android:layout_marginTop="120dp"
         android:text="Post" />
+
+    <EditText
+        android:id="@+id/memoryEditTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/memoryTime"
+        android:layout_alignLeft="@+id/memoryEditTitle"
+        android:ems="10"
+        android:inputType="date" >
+
+        <requestFocus />
+    </EditText>
 
 </RelativeLayout>

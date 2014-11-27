@@ -5,7 +5,7 @@
     android:background="@drawable/background" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/thingTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -15,42 +15,42 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/newAccount"
+        android:id="@+id/thingEditTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignBottom="@+id/thingTitle"
         android:layout_marginLeft="31dp"
-        android:layout_toRightOf="@+id/textView1"
+        android:layout_toRightOf="@+id/thingTitle"
         android:ems="10" >
 
         <requestFocus />
     </EditText>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/thingTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/thingTitle"
         android:layout_marginTop="50dp"
         android:text="Password"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/newPassword"
+        android:id="@+id/thingEditTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_alignLeft="@+id/newAccount"
+        android:layout_alignBottom="@+id/thingTime"
+        android:layout_alignLeft="@+id/thingEditTime"
         android:ems="10"
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/create"
+        android:id="@+id/timeLine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/newPassword"
-        android:layout_below="@+id/newPassword"
+        android:layout_alignRight="@+id/thingEditTitle"
+        android:layout_below="@+id/thingEditTitle"
         android:layout_marginTop="137dp"
         android:text="Create" />
 

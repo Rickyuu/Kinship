@@ -14,21 +14,21 @@
         android:layout_alignParentRight="true" >
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/timeLine3"
             android:layout_width="1px"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="TimeLine" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/state3"
             android:layout_width="1px"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Status" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/memory3"
             android:layout_width="1px"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -36,29 +36,29 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/listView1"
+        android:id="@+id/memoryList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/linearLayout1"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/imageButton1" >
+        android:layout_below="@+id/addMemory" >
 
     </ListView>
 
     <ImageButton
-        android:id="@+id/imageButton1"
+        android:id="@+id/settingInMemory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/thingView"
+        android:layout_alignParentLeft="true"
+        android:src="@android:drawable/ic_menu_preferences" />
+
+    <ImageButton
+        android:id="@+id/addMemory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:src="@android:drawable/ic_menu_edit" />
-
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/listView1"
-        android:layout_alignParentLeft="true"
-        android:src="@android:drawable/ic_menu_preferences" />
+        android:src="@android:drawable/ic_input_add" />
 
 </RelativeLayout>

@@ -1,7 +1,16 @@
 package com.speed.kinship.view;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import com.speed.kinship.controller.StateHandler;
+import com.speed.kinship.controller.impl.StateHandlerImpl;
+import com.speed.kinship.model.State;
+
 import android.app.Activity;
 import android.app.ListActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.gesture.GestureOverlayView;
@@ -83,7 +92,7 @@ public class StateActivity extends Activity{
         id = b.getString("id");
         identity = b.getString("identity");*/
         username = new String("echo");
-        id = new String("3");
+        id = new String("7");
         identity = new String("PARENT");
         setStartid(-1);
         stlist = new ArrayList<HashMap<String, Object>>();
