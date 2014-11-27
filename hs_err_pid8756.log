@@ -1,0 +1,123 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  Internal Error (javaClasses.cpp:136), pid=8756, tid=5728
+#  fatal error: Invalid layout of preloaded class
+#
+# JRE version:  (7.0_71-b14) (build )
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (24.71-b01 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.sun.com/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000000002730800):  JavaThread "Unknown thread" [_thread_in_vm, id=5728, stack(0x0000000002630000,0x0000000002730000)]
+
+Stack: [0x0000000002630000,0x0000000002730000]
+[error occurred during error reporting (printing stack bounds), id 0xc0000005]
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+
+Other Threads:
+
+=>0x0000000002730800 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=5728, stack(0x0000000002630000,0x0000000002730000)]
+
+VM state:not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (10 events):
+Event: 0.010 loading class 0x0000000002775120 done
+Event: 0.010 loading class 0x0000000002774b40 done
+Event: 0.010 loading class 0x0000000002774b20
+Event: 0.010 loading class 0x000000000277cc80
+Event: 0.010 loading class 0x000000000277cc80 done
+Event: 0.010 loading class 0x000000000277ccb0
+Event: 0.010 loading class 0x000000000277ccb0 done
+Event: 0.010 loading class 0x000000000277cce0
+Event: 0.010 loading class 0x000000000277cce0 done
+Event: 0.010 loading class 0x0000000002774b20 done
+
+
+Dynamic libraries:
+0x00007ff7fb030000 - 0x00007ff7fb063000 	C:\Program Files\Java\jre7\bin\javaw.exe
+0x00007ff8d2340000 - 0x00007ff8d24e6000 	C:\windows\SYSTEM32\ntdll.dll
+0x00007ff8cfd40000 - 0x00007ff8cfe7a000 	C:\windows\system32\KERNEL32.DLL
+0x00007ff8cf430000 - 0x00007ff8cf53f000 	C:\windows\system32\KERNELBASE.dll
+0x00007ff8cdeb0000 - 0x00007ff8cdf38000 	C:\windows\system32\apphelp.dll
+0x00007ff8bd920000 - 0x00007ff8bd96f000 	C:\windows\AppPatch\AppPatch64\AcGenral.DLL
+0x00007ff8d1590000 - 0x00007ff8d1637000 	C:\windows\system32\msvcrt.dll
+0x00007ff8cf170000 - 0x00007ff8cf19b000 	C:\windows\SYSTEM32\SspiCli.dll
+0x00007ff8d2170000 - 0x00007ff8d21c1000 	C:\windows\system32\SHLWAPI.dll
+0x00007ff8d1640000 - 0x00007ff8d17b1000 	C:\windows\system32\USER32.dll
+0x00007ff8d13b0000 - 0x00007ff8d1528000 	C:\windows\system32\ole32.dll
+0x00007ff8cfe80000 - 0x00007ff8d128f000 	C:\windows\system32\SHELL32.dll
+0x00007ff8ce980000 - 0x00007ff8ce99e000 	C:\windows\SYSTEM32\USERENV.dll
+0x00007ff8d18b0000 - 0x00007ff8d1955000 	C:\windows\system32\ADVAPI32.dll
+0x00007ff8ba730000 - 0x00007ff8ba74b000 	C:\windows\SYSTEM32\MPR.dll
+0x00007ff8d1fa0000 - 0x00007ff8d20d7000 	C:\windows\system32\RPCRT4.dll
+0x00007ff8d22e0000 - 0x00007ff8d2337000 	C:\windows\SYSTEM32\sechost.dll
+0x00007ff8cfb60000 - 0x00007ff8cfd36000 	C:\windows\SYSTEM32\combase.dll
+0x00007ff8d1be0000 - 0x00007ff8d1d24000 	C:\windows\system32\GDI32.dll
+0x00007ff8cf2e0000 - 0x00007ff8cf2f4000 	C:\windows\SYSTEM32\profapi.dll
+0x00007ff8cdf40000 - 0x00007ff8cdfdf000 	C:\windows\SYSTEM32\SHCORE.dll
+0x00007ff8cf8d0000 - 0x00007ff8cf904000 	C:\windows\system32\IMM32.DLL
+0x00007ff8d1aa0000 - 0x00007ff8d1bd9000 	C:\windows\system32\MSCTF.dll
+0x00007ff8cd610000 - 0x00007ff8cd86a000 	C:\windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.9600.17031_none_6242a4b3ecbb55a1\COMCTL32.dll
+0x00000000686c0000 - 0x0000000068792000 	C:\Program Files\Java\jre7\bin\msvcr100.dll
+0x0000000067ee0000 - 0x00000000686b3000 	C:\Program Files\Java\jre7\bin\server\jvm.dll
+0x00007ff8c52b0000 - 0x00007ff8c52b9000 	C:\windows\SYSTEM32\WSOCK32.dll
+0x00007ff8cf410000 - 0x00007ff8cf42f000 	C:\windows\system32\WINMM.dll
+0x00007ff8cfaf0000 - 0x00007ff8cfaf7000 	C:\windows\system32\PSAPI.DLL
+0x00007ff8d12a0000 - 0x00007ff8d12f8000 	C:\windows\system32\WS2_32.dll
+0x00007ff8cf3c0000 - 0x00007ff8cf3ea000 	C:\windows\system32\WINMMBASE.dll
+0x00007ff8d1290000 - 0x00007ff8d1299000 	C:\windows\system32\NSI.dll
+0x00007ff8cf540000 - 0x00007ff8cf58a000 	C:\windows\SYSTEM32\cfgmgr32.dll
+0x00007ff8cf390000 - 0x00007ff8cf3b6000 	C:\windows\system32\DEVOBJ.dll
+0x0000000067ed0000 - 0x0000000067edf000 	C:\Program Files\Java\jre7\bin\verify.dll
+0x0000000067ea0000 - 0x0000000067ec8000 	C:\Program Files\Java\jre7\bin\java.dll
+0x0000000067e80000 - 0x0000000067e95000 	C:\Program Files\Java\jre7\bin\zip.dll
+
+VM Arguments:
+jvm_args: -Dfile.encoding=GBK -Xbootclasspath:C:\Program Files\AndroidDeveloper\adt-bundle-windows-x86_64-20140702\sdk\platforms\android-20\android.jar 
+java_command: com.speed.kinship.net.ServerListener
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=C:\Program Files\Java\jdk1.7.0_71
+CLASSPATH=.;C:\Program Files\Java\jdk1.7.0_71\lib\dt.jar;C:\Program Files\Java\jdk1.7.0_71\lib\tools.jar
+PATH=C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\Lenovo\Fingerprint Manager Pro\;C:\Program Files (x86)\Common Files\lenovo\easyplussdk\bin;C:\Program Files\Condusiv Technologies\ExpressCache\;C:\ProgramData\Lenovo\ReadyApps;C:\Python27;C:\Program Files\Java\jdk1.7.0_71\bin;C:\Program Files\Java\jdk1.7.0_71\jre\bin;C:\Program Files (x86)\IDM Computer Solutions\UltraEdit\;C:\Python27\Lib\site-packages\Django-1.8-py2.7.egg\django\bin
+USERNAME=Echi
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 69 Stepping 1, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 8.1 , 64 bit Build 9600 
+
+CPU:total 4 (2 cores per cpu, 2 threads per core) family 6 model 69 stepping 1, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, erms, ht, tsc, tscinvbit
+
+Memory: 4k page, physical 8265608k(3445772k free), swap 9576328k(2774196k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (24.71-b01) for windows-amd64 JRE (1.7.0_71-b14), built on Sep 26 2014 16:16:12 by "java_re" with unknown MS VC++:1600
+
+time: Thu Nov 27 22:30:12 2014
+elapsed time: 0 seconds
+
