@@ -59,6 +59,7 @@ public class MemoryCreateActivity extends Activity {
 				addMemory.execute( );
 				Intent intent=new Intent();
 				intent.setClass(MemoryCreateActivity.this, MemoryActivity.class);
+				startActivity(intent);
 			}
 			
 		});

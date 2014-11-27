@@ -49,8 +49,7 @@ public class MemoryActivity extends Activity {
 		memory=(Button) findViewById(R.id.memory3);
 		getMemoryAsyncTask getMemory=new getMemoryAsyncTask();
 		getMemory.execute( );
-		mAdapter = new myAdapter(MemoryActivity.this);
-		memoryList.setAdapter(mAdapter);
+		
 		add.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -58,6 +57,7 @@ public class MemoryActivity extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent=new Intent();
 				intent.setClass(MemoryActivity.this, MemoryCreateActivity.class);
+				startActivity(intent);
 			}
 			
 		});
@@ -116,6 +116,7 @@ public class MemoryActivity extends Activity {
 		@Override
 		protected void onPostExecute(List<Memory> result) {
 			// TODO Auto-generated method stub
+			myList=new ArrayList<HashMap<String,String>>();
 			for(Memory temp:result) {
 				HashMap<String, String> hm=new HashMap<String,String>();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -126,7 +127,9 @@ public class MemoryActivity extends Activity {
 				hm.put("time", str);
 				myList.add(hm);
 			}
-			
+			mAdapter = new myAdapter(MemoryActivity.this);
+			memoryList.setAdapter(mAdapter);
+			System.out.println("data!!!");
 		}
 		
 	}
@@ -179,16 +182,16 @@ public class MemoryActivity extends Activity {
 			}
 			holder.Content.setText(myList.get(position).get("content"));
 			holder.Time.setText(myList.get(position).get("time"));
-			final int deletePosition=Integer.parseInt(myList.get(position).get("id"));
+			final int deleteId=Integer.parseInt(myList.get(position).get("id"));
+			final int listPosition=position;
 			holder.Delete.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					
-					deleteMemoryAsyncTask deleteMemory=new deleteMemoryAsyncTask(deletePosition);
+					deleteMemoryAsyncTask deleteMemory=new deleteMemoryAsyncTask(deleteId,listPosition);
 					deleteMemory.execute( );
-					mAdapter.notifyDataSetChanged();
 					
 				}
 				
@@ -200,11 +203,13 @@ public class MemoryActivity extends Activity {
 	private class deleteMemoryAsyncTask extends AsyncTask<Void,Void,Boolean> {
 		
 		private int memoryId;
+		private int listPosition;
 		
 
-		public deleteMemoryAsyncTask(int memoryId) {
+		public deleteMemoryAsyncTask(int memoryId,int listPosition) {
 			super();
 			this.memoryId = memoryId;
+			this.listPosition=listPosition;
 		}
 
 		@Override
@@ -217,7 +222,10 @@ public class MemoryActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			// TODO Auto-generated method stub
+			
+			mAdapter.notifyDataSetChanged();
 			if(result==true) {
+				myList.remove(listPosition);
 				Log.i("DeleteMemory", "Success");
 			} else {
 				Log.i("DeleteMemory","Fail");

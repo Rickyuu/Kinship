@@ -1,5 +1,12 @@
 package com.speed.kinship.view;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,6 +40,8 @@ public class LoginingActivity extends Activity {
 	private int numIndex;
 	private int dateIndex;
 	private String target;
+	private String myPhone;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +49,25 @@ public class LoginingActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.logining);
 		welcome=(TextView) findViewById(R.id.welcome);
+//		String path="res\\phone.txt";
+//		File file=new File(path);
+//		FileInputStream input;
+//		try {
+//			input = new FileInputStream(file);
+//			InputStreamReader inputReader=new InputStreamReader(input);
+//			
+//			BufferedReader bufferedReader=new BufferedReader(inputReader);
+//			String str=null;
+//			while((str=bufferedReader.readLine())!=null) {
+//				//String[] splited=str.split(",");
+//				myPhone=str;
+//			}
+//			
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
 		
 		String[] projection = { CallLog.Calls.DATE, // ÈÕÆÚ  
                 CallLog.Calls.NUMBER, // ºÅÂë  
@@ -65,14 +93,15 @@ public class LoginingActivity extends Activity {
 		}
 		welcome.setText("The date of the last contact is "+target);
 		
-		final Intent intent=new Intent();
-		intent.setClass(LoginingActivity.this, StateActivity.class);
 		Timer timer=new Timer();
 		TimerTask task=new TimerTask() {
 
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
+				Intent intent=new Intent();
+				intent=LoginingActivity.this.getIntent();
+				intent.setClass(LoginingActivity.this, ThingActivity.class);
 				startActivity(intent);
 			}
 			
