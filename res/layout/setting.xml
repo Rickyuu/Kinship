@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background" >
+
+    <TextView
+        android:id="@+id/settingInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="25dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:text="Your family phone numbers:"/>
+
+    <EditText
+        android:id="@+id/phoneNum1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/settingInfo"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:hint="Mother&apos;s phone No." >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/phoneNum2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/phoneNum1"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Father&apos;s phone No." />
+    
+     <EditText
+         android:id="@+id/phoneNum3"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/phoneNum2"
+         android:layout_marginLeft="45dp"
+         android:layout_marginTop="20dp"
+         android:ems="10"
+         android:hint="Child&apos;s phone No." />
+
+    <Button
+        android:id="@+id/settingConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/phoneNum3"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="25dp"
+        android:text="Confirm" />
+
+</RelativeLayout>

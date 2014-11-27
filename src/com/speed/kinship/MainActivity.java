@@ -10,6 +10,7 @@ import com.speed.kinship.controller.impl.UserHandlerImpl;
 import com.speed.kinship.model.Identity;
 import com.speed.kinship.model.State;
 import com.speed.kinship.model.User;
+import com.speed.kinship.view.R;
 
 import android.app.Activity;
 import android.os.AsyncTask;

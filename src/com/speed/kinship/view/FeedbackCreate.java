@@ -1,6 +1,7 @@
 package com.speed.kinship.view;
 
 import com.speed.kinship.controller.impl.StateHandlerImpl;
+import com.speed.kinship.model.Feedback;
 import com.speed.kinship.model.Identity;
 import com.speed.kinship.model.State;
 import com.speed.kinship.model.User;
@@ -16,28 +17,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class StateCreateActivity extends Activity {
+public class FeedbackCreate extends Activity {
 	private EditText text;
 	private Button post;
-	private Button picture;
 	
 	private String username;
 	private String id;
 	private String identity;
+	private String stateId;
 	
 	@Override 
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-        setContentView(R.layout.statecreat);
+        setContentView(R.layout.feedbackcreat);
         
-        text = (EditText) findViewById (R.id.newText);
-        post = (Button) findViewById (R.id.create);
-        picture = (Button) findViewById (R.id.buttonAddPic);
+        text = (EditText) findViewById (R.id.newFeedback);
+        post = (Button) findViewById (R.id.postFeedback);
         
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
         username = b.getString("userName");//待修改，主要获取username
         id = b.getString("id");
+        stateId = b.getString("stateId");
         identity = b.getString("identity");
         
         post.setOnClickListener(new OnClickListener(){
@@ -46,72 +47,59 @@ public class StateCreateActivity extends Activity {
 			public void onClick(View v) {
 				String context = new String(text.getText().toString());
 				if(context.isEmpty()){
-					Toast toast = Toast.makeText(getApplicationContext(), "You cannot post an empty status.", Toast.LENGTH_SHORT);
+					Toast toast = Toast.makeText(getApplicationContext(), "You cannot post an empty reply.", Toast.LENGTH_SHORT);
 					toast.setGravity(Gravity.CENTER, 0, 0);
 					toast.show();
 				}else{
-					PostStateAsyncTask postState = new PostStateAsyncTask(username, id, identity, context);
+					FeedbackCreateAsyncTask postState = new FeedbackCreateAsyncTask(username, id, identity, context);
 					postState.execute();
 					Bundle data = new Bundle();
 	        		data.putString("username",username);
 	        		data.putString("id", id);
 	        		data.putString("identity", identity);
-	        		Intent intent = new Intent(StateCreateActivity.this, StateActivity.class);
+	        		Intent intent = new Intent(FeedbackCreate.this, StateActivity.class);
 	        		intent.putExtras(data);
 	        		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	        		startActivity(intent);
 				}
 			}
         });
-        
-        /*
-        picture.setOnClickListener(new OnClickListener(){
-        	
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-			}
-        });
-        */
 	}
 	
-	 public static interface DataFinishListener { 
-	        void dataFinishSuccessfully(); 
-	    } 
-	
-	private class PostStateAsyncTask extends AsyncTask<Void, Void, State> {
+	private class FeedbackCreateAsyncTask extends AsyncTask<Void, Void, Feedback> {
 		
 		private String username;
-		private String id;
+		private int id;
 		private String identity;
 		private String context;
+		private int stateid;
 
-		public PostStateAsyncTask(String username, String id, String identity, String context) {
+		public FeedbackCreateAsyncTask(String username, String id, String identity, String context) {
 			this.username = username;
-			this.id = id;
+			this.id = Integer.parseInt(id);
 			this.identity = identity;
 			this.context = context;
+			this.stateid = Integer.parseInt(stateId);
 		}
 		
 		@Override
-		protected State doInBackground(Void... params) {
+		protected Feedback doInBackground(Void... params) {
 			User creator = new User();
-			creator.setId(Integer.parseInt(id));
+			creator.setId(id);
 			creator.setUserName(username);
 			StateHandlerImpl StateHler = new StateHandlerImpl();
-			State feedback = StateHler.addState(creator, context, null);
-			return feedback;
+			Feedback result = StateHler.addFeedback(stateid, creator, context);
+			return result;
 		}
 		
 		@Override
-		protected void onPostExecute(State feedback) {
-			if(feedback == null){
+		protected void onPostExecute(Feedback result) {
+			if(result == null){
 				Toast toast = Toast.makeText(getApplicationContext(), "Post Failed. Please try again.", Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
 			}else{
-				Toast toast = Toast.makeText(getApplicationContext(), "Post new state successfully.", Toast.LENGTH_SHORT);
+				Toast toast = Toast.makeText(getApplicationContext(), "Post new reply successfully.", Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
 			}
