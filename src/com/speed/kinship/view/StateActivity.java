@@ -16,8 +16,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -55,6 +58,9 @@ public class StateActivity extends Activity{
 	private stateAdapter mSchedule;
 	ArrayList<HashMap<String, Object>> stlist;
 	
+	private boolean refreshable;
+	private GestureDetector myGesture;
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +74,6 @@ public class StateActivity extends Activity{
         timeline = (Button) findViewById(R.id.button2);
         status = (Button) findViewById(R.id.create);
         memory = (Button) findViewById(R.id.button3);
-        //status.setClickable(false);
-        //status.setSelected(true);
         
         /*Intent intent = getIntent();
         Bundle b = intent.getExtras();
@@ -84,9 +88,10 @@ public class StateActivity extends Activity{
         
         mSchedule = new stateAdapter(this, stlist);
 
+        //View firstChild = list.getChildAt(0);
+        //firstChild.getTop();
         list.addFooterView(listFooter);
         list.setAdapter(mSchedule);//添加并且显示
-        //list.setVisibility(View.INVISIBLE);
         
         GetStateAsyncTask stateTask = new GetStateAsyncTask();
         stateTask.execute();
@@ -179,7 +184,111 @@ public class StateActivity extends Activity{
             }  
         });
 
+        refreshable = true;
+		myGesture = new GestureDetector(this, new OnGestureListener(){
+
+			@Override
+			public boolean onDown(MotionEvent e) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public void onShowPress(MotionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public boolean onSingleTapUp(MotionEvent e) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean onScroll(MotionEvent e1, MotionEvent e2,
+					float distanceX, float distanceY) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public void onLongPress(MotionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public boolean onFling(MotionEvent e1, MotionEvent e2,
+					float velocityX, float velocityY) {
+					Log.i("Fling", "baseactivity");    
+		          //左滑动  
+		        	//if (e1.getX() - e2.getX() > 80||e1.getY()-e2.getY()>80) 
+		        	if (e1.getX() - e2.getX() > 300) {    
+		            
+		                Log.e("flag","左滑动"); 
+		                Toast toast = Toast.makeText(getApplicationContext(), "左滑动", Toast.LENGTH_SHORT);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+		                
+		                return true;    
+		            }   
+		            //右滑动  
+		            //else if (e1.getX() - e2.getX() <-80||e1.getY()-e2.getY()<-80) 
+			        else if (e1.getX() - e2.getX() <-300){    
+		              
+		                Log.e("flag","右滑动"); 
+		                Toast toast = Toast.makeText(getApplicationContext(), "右滑动", Toast.LENGTH_SHORT);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+		                
+		                return true;    
+		            } 
+			        else if ((e1.getY() - e2.getY() <-400) && getRefreshable()){    
+			              
+			        	refreshStateAsyncTask stateTask = new refreshStateAsyncTask();
+		                stateTask.execute();
+		                
+		                return true;    
+		            } 
+				return false;
+			}
+			
+		});//可能需要重写gestureDetector
     }
+	
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent event){
+		View firstChild = list.getChildAt(0);  
+        if (firstChild != null) {  
+            int firstVisiblePos = list.getFirstVisiblePosition();  
+            if (firstVisiblePos == 0 && firstChild.getTop() == 0) { 
+                // 如果首个元素的上边缘，距离父布局值为0，就说明ListView滚动到了最顶部，此时应该允许下拉刷新  
+                setRefreshable(true);  
+            } else {
+            	setRefreshable(false); 
+            }  
+        } else {  
+            // 如果ListView中没有元素，也应该允许下拉刷新  
+        	setRefreshable(true); 
+        }  
+		myGesture.onTouchEvent(event);
+		super.dispatchTouchEvent(event);
+		return true;
+	}
+	
+	private void setStartid(int i){
+		startid = i;
+	}
+	
+	public boolean setRefreshable(boolean status){
+		refreshable = status;
+		return true;
+	}
+	
+	public boolean getRefreshable(){
+		return refreshable;
+	}
 	
 	private class GetStateAsyncTask extends AsyncTask<Void, Void, List<State>> {
 		
@@ -339,9 +448,6 @@ public class StateActivity extends Activity{
 		
 	}
 	
-	private void setStartid(int i){
-		startid = i;
-	}
 	
 	public class stateAdapter extends BaseAdapter{
 		
@@ -567,6 +673,7 @@ public class StateActivity extends Activity{
 	    params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1)); 
 	    listView.setLayoutParams(params); 
 	}
+
 }
 
 class feedbackList{
