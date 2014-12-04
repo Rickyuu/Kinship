@@ -18,7 +18,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnClickListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -46,6 +50,10 @@ public class ThingActivity extends Activity {
 	private int id;
 	private String identity;
 	private String userName;
+	
+	//for gestureDetector
+	private boolean refreshable;
+	private GestureDetector myGesture;
 	
 	MyBroadcast broadcastReceiver=null;
 	
@@ -207,7 +215,116 @@ public class ThingActivity extends Activity {
 			
 		});
 		
+		//for GestureDetector
+		refreshable = true;
+		myGesture = new GestureDetector(this, new OnGestureListener(){
+
+			@Override
+			public boolean onDown(MotionEvent e) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public void onShowPress(MotionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public boolean onSingleTapUp(MotionEvent e) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean onScroll(MotionEvent e1, MotionEvent e2,
+					float distanceX, float distanceY) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public void onLongPress(MotionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public boolean onFling(MotionEvent e1, MotionEvent e2,
+					float velocityX, float velocityY) {
+					Log.i("Fling", "baseactivity");    
+		          //左滑动  
+		        	if (e1.getX() - e2.getX() > 300) {    
+		            
+		        		Intent intent=new Intent();
+						intent=ThingActivity.this.getIntent();
+						intent.setClass(ThingActivity.this, StateActivity.class);
+						intent.putExtra("id", String.valueOf(id));
+						intent.putExtra("identity", identity);
+						intent.putExtra("userName",userName);
+						startActivity(intent);
+						ThingActivity.this.finish();
+		                
+		                return true;    
+		            }   
+		            //右滑动  
+		            else if (e1.getX() - e2.getX() <-300) {    
+		              
+		            	Intent intent=new Intent();
+						intent.setClass(ThingActivity.this,MemoryActivity.class);
+						intent.putExtra("id", String.valueOf(id));
+						intent.putExtra("identity", identity);
+						intent.putExtra("userName",userName);
+						startActivity(intent);
+						ThingActivity.this.finish();
+		                
+		                return true;    
+		            } 
+		            else if ((e1.getY() - e2.getY() <-400) && getRefreshable()){    
+			              
+		            	thiList=new ArrayList<Thing>();
+						getThingAsyncTask getthing=new getThingAsyncTask(ThingActivity.this.id,ThingActivity.this.identity,ThingActivity.this.userName);
+						getthing.execute( );
+		                
+		                return true;    
+		            } 
+				return false;
+			}
+			
+		});//可能需要重写gestureDetector
 	}
+	
+	//for Gesture Detector
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent event){
+		View firstChild = thingList.getChildAt(0);  
+        if (firstChild != null) {  
+            int firstVisiblePos = thingList.getFirstVisiblePosition();  
+            if (firstVisiblePos == 0 && firstChild.getTop() == 0) { 
+                // 如果首个元素的上边缘，距离父布局值为0，就说明ListView滚动到了最顶部，此时应该允许下拉刷新  
+                setRefreshable(true);  
+            } else {
+            	setRefreshable(false); 
+            }  
+        } else {  
+            // 如果ListView中没有元素，也应该允许下拉刷新  
+        	setRefreshable(true); 
+        }  
+		myGesture.onTouchEvent(event);
+		super.dispatchTouchEvent(event);
+		return true;
+	}
+	
+	public boolean setRefreshable(boolean status){
+		refreshable = status;
+		return true;
+	}
+	
+	public boolean getRefreshable(){
+		return refreshable;
+	}
+	
 	private class MyBroadcast extends BroadcastReceiver {
 
 		@Override
@@ -259,7 +376,8 @@ public class ThingActivity extends Activity {
 		unregisterReceiver( broadcastReceiver);
 	}
 	
-	@SuppressLint("SimpleDateFormat") private class getNextNThingAsyncTask extends AsyncTask<Void,Void,List<Thing>> {
+	@SuppressLint("SimpleDateFormat") 
+	private class getNextNThingAsyncTask extends AsyncTask<Void,Void,List<Thing>> {
 		private int id;
 		@SuppressWarnings("unused")
 		private String identity;
