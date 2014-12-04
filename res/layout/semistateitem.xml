@@ -27,10 +27,21 @@
                 android:layout_marginRight="10dp"  
                 android:textSize="20dip">  
         </TextView>  
+        <ImageView  
+        	android:id="@+id/statusimage"  
+        	android:layout_below="@+id/ItemText"
+        	android:layout_width="150dp"
+        	android:layout_height="150dp"  
+        	android:layout_alignParentLeft="true"  
+        	android:layout_marginTop="5dp"
+        	android:layout_marginBottom="3dp"
+        	android:layout_marginLeft="20dp"
+        	android:gravity="center_vertical"  
+        	android:scaleType="centerCrop" /> 
         <TextView   
                 android:layout_height="wrap_content"   
                 android:layout_width="fill_parent" 
-                android:layout_below="@+id/ItemText" 
+                android:layout_below="@+id/statusimage" 
                 android:layout_marginTop="2dp"
                 android:layout_marginLeft="15dp" 
                 android:id="@+id/ItemTime">  
@@ -40,7 +51,7 @@
         		android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
        		 	android:layout_alignParentRight="true"
-        		android:layout_below="@+id/ItemText" 
+        		android:layout_below="@+id/statusimage" 
         		android:layout_marginRight="10dp"
        			android:src="@drawable/comments" 
        			android:background="#00000000"/>
@@ -49,11 +60,10 @@
         		android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
        		 	android:layout_alignParentLeft="true"
-        		android:layout_below="@+id/ItemText" 
+        		android:layout_below="@+id/statusimage" 
         		android:layout_marginLeft="100dp"
        			android:src="@drawable/delete" 
        			android:background="#00000000"/>
-
         
         <ListView
         	android:id="@+id/listViewReplies"

@@ -61,6 +61,7 @@ public class settingActivity extends Activity {
 					editor.putString("father", dadPhone);
 					editor.putString("child", chiPhone);
 					editor.commit();
+					settingActivity.this.finish();
 					
 					/*SystemClock.sleep(1000);
 					file = getSharedPreferences("kinship_setting", Context.MODE_PRIVATE);

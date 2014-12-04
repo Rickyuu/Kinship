@@ -13,6 +13,7 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -39,6 +41,7 @@ import android.widget.Toast;
 
 import com.speed.kinship.controller.impl.StateHandlerImpl;
 import com.speed.kinship.model.State;
+import com.speed.kinship.util.PicFormatTools;
 
 //必须传入username以获取状态
 public class StateActivity extends Activity{
@@ -121,7 +124,6 @@ public class StateActivity extends Activity{
         		data.putString("identity", identity);
         		Intent intent = new Intent(StateActivity.this, settingActivity.class);
         		intent.putExtras(data);
-        		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         		startActivity(intent);
         	}
         });
@@ -136,8 +138,8 @@ public class StateActivity extends Activity{
         		data.putString("identity", identity);
         		Intent intent = new Intent(StateActivity.this, ThingActivity.class);
         		intent.putExtras(data);
-        		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         		startActivity(intent);
+        		StateActivity.this.finish();
         	}
         });
         
@@ -160,8 +162,8 @@ public class StateActivity extends Activity{
         		data.putString("identity", identity);
         		Intent intent = new Intent(StateActivity.this, MemoryActivity.class);
         		intent.putExtras(data);
-        		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         		startActivity(intent);
+        		StateActivity.this.finish();
         	}
         });
         
@@ -226,10 +228,14 @@ public class StateActivity extends Activity{
 		        	//if (e1.getX() - e2.getX() > 80||e1.getY()-e2.getY()>80) 
 		        	if (e1.getX() - e2.getX() > 300) {    
 		            
-		                Log.e("flag","左滑动"); 
-		                Toast toast = Toast.makeText(getApplicationContext(), "左滑动", Toast.LENGTH_SHORT);
-						toast.setGravity(Gravity.CENTER, 0, 0);
-						toast.show();
+		        		Bundle data = new Bundle();
+		        		data.putString("username",username);
+		        		data.putString("id", id);
+		        		data.putString("identity", identity);
+		        		Intent intent = new Intent(StateActivity.this, MemoryActivity.class);
+		        		intent.putExtras(data);
+		        		startActivity(intent);
+		        		StateActivity.this.finish();
 		                
 		                return true;    
 		            }   
@@ -237,10 +243,14 @@ public class StateActivity extends Activity{
 		            //else if (e1.getX() - e2.getX() <-80||e1.getY()-e2.getY()<-80) 
 			        else if (e1.getX() - e2.getX() <-300){    
 		              
-		                Log.e("flag","右滑动"); 
-		                Toast toast = Toast.makeText(getApplicationContext(), "右滑动", Toast.LENGTH_SHORT);
-						toast.setGravity(Gravity.CENTER, 0, 0);
-						toast.show();
+			        	Bundle data = new Bundle();
+		        		data.putString("username",username);
+		        		data.putString("id", id);
+		        		data.putString("identity", identity);
+		        		Intent intent = new Intent(StateActivity.this, ThingActivity.class);
+		        		intent.putExtras(data);
+		        		startActivity(intent);
+		        		StateActivity.this.finish();
 		                
 		                return true;    
 		            } 
@@ -359,6 +369,11 @@ public class StateActivity extends Activity{
 					}else{
 						map.put("feedbacks", null);
 					}
+					if((ob.getPic() != null)){
+						map.put("pic", ob.getPic());
+					}else{
+						map.put("pic", null);
+					}
 					stlist.add(map);  
 				} 
 				setStartid(ob.getId());
@@ -436,6 +451,11 @@ public class StateActivity extends Activity{
 					}else{
 						map.put("feedbacks", null);
 					}
+					if((ob.getPic() != null)){
+						map.put("pic", ob.getPic());
+					}else{
+						map.put("pic", null);
+					}
 					stlist.add(map);  
 				} 
 				setStartid(ob.getId());
@@ -469,6 +489,7 @@ public class StateActivity extends Activity{
 	        public ImageButton delete;
 	        public ImageButton comment;
 	        public ListView replies;
+	        public ImageView image;
 	    }  
 		
 		@Override
@@ -496,12 +517,21 @@ public class StateActivity extends Activity{
 	        holder.delete = (ImageButton) convertView.findViewById(R.id.imageButtonDe);
 	        holder.comment = (ImageButton) convertView.findViewById(R.id.imageButtonRe);
 	        holder.replies = (ListView) convertView.findViewById(R.id.listViewReplies);
+	        holder.image = (ImageView) convertView.findViewById(R.id.statusimage);
 	        convertView.setTag(holder);  
 	  
 	        item = arrayList.get(position);  
 	        holder.username.setText((String)item.get("username"));  
 	        holder.content.setText((String)item.get("content"));
 	        holder.time.setText((String)item.get("time"));
+	        
+	        if(item.get("pic") != null){
+	        	Bitmap imageBitmap = PicFormatTools.getInstance().Bytes2Bitmap((byte[]) item.get("pic"));
+	        	holder.image.setVisibility(View.VISIBLE);
+	        	holder.image.setImageBitmap(imageBitmap);
+	        }else{
+	        	holder.image.setVisibility(View.GONE);
+	        }
 	        
 	        if(item.get("feedbacks")!=null){
 	        	final feedbackList feedbacks = (feedbackList)item.get("feedbacks");
