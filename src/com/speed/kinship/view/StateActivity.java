@@ -1,55 +1,47 @@
 package com.speed.kinship.view;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
-import com.speed.kinship.controller.StateHandler;
-import com.speed.kinship.controller.impl.StateHandlerImpl;
-import com.speed.kinship.model.State;
-
 import android.app.Activity;
-import android.app.ListActivity;
-
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.gesture.GestureOverlayView;
-import android.gesture.GestureOverlayView.OnGestureListener;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Scroller;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import com.speed.kinship.controller.impl.StateHandlerImpl;
-import com.speed.kinship.model.Feedback;
-import com.speed.kinship.model.Identity;
 import com.speed.kinship.model.State;
-import com.speed.kinship.model.User;
+import com.speed.kinship.util.PicFormatTools;
 
 //必须传入username以获取状态
 public class StateActivity extends Activity{
@@ -69,6 +61,9 @@ public class StateActivity extends Activity{
 	private stateAdapter mSchedule;
 	ArrayList<HashMap<String, Object>> stlist;
 	
+	private boolean refreshable;
+	private GestureDetector myGesture;
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,15 +71,12 @@ public class StateActivity extends Activity{
         //绑定XML中的ListView，作为Item的容器
         setting = (ImageButton) findViewById(R.id.imageButton2);
         list = (ListView) findViewById(R.id.listView1);
-        //listFooter = (View) findViewById(R.layout.loadingfooter);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         listFooter = layoutInflater.inflate(R.layout.loadingfooter, null);
         create = (ImageButton) findViewById(R.id.imageButton1);
         timeline = (Button) findViewById(R.id.button2);
         status = (Button) findViewById(R.id.create);
         memory = (Button) findViewById(R.id.button3);
-        //status.setClickable(false);
-        //status.setSelected(true);
         
         /*Intent intent = getIntent();
         Bundle b = intent.getExtras();
@@ -92,16 +84,17 @@ public class StateActivity extends Activity{
         id = b.getString("id");
         identity = b.getString("identity");*/
         username = new String("echo");
-        id = new String("7");
+        id = new String("3");
         identity = new String("PARENT");
         setStartid(-1);
         stlist = new ArrayList<HashMap<String, Object>>();
         
         mSchedule = new stateAdapter(this, stlist);
 
+        //View firstChild = list.getChildAt(0);
+        //firstChild.getTop();
         list.addFooterView(listFooter);
         list.setAdapter(mSchedule);//添加并且显示
-        //list.setVisibility(View.INVISIBLE);
         
         GetStateAsyncTask stateTask = new GetStateAsyncTask();
         stateTask.execute();
@@ -131,7 +124,6 @@ public class StateActivity extends Activity{
         		data.putString("identity", identity);
         		Intent intent = new Intent(StateActivity.this, settingActivity.class);
         		intent.putExtras(data);
-        		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         		startActivity(intent);
         	}
         });
@@ -146,8 +138,8 @@ public class StateActivity extends Activity{
         		data.putString("identity", identity);
         		Intent intent = new Intent(StateActivity.this, ThingActivity.class);
         		intent.putExtras(data);
-        		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         		startActivity(intent);
+        		StateActivity.this.finish();
         	}
         });
         
@@ -170,8 +162,8 @@ public class StateActivity extends Activity{
         		data.putString("identity", identity);
         		Intent intent = new Intent(StateActivity.this, MemoryActivity.class);
         		intent.putExtras(data);
-        		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         		startActivity(intent);
+        		StateActivity.this.finish();
         	}
         });
         
@@ -186,17 +178,127 @@ public class StateActivity extends Activity{
                         stateTask.execute();//加载数据代码-test
                     }
             }  
-            //这三个int类型的参数可以自行Log打印一下就知道是什么意思了  
             @Override  
             public void onScroll(AbsListView view, int firstVisibleItem,  
                     int visibleItemCount, int totalItemCount) {  
-                //ListView 的FooterView也会算到visibleItemCount中去，所以要再减去一  
                 lastItemIndex = firstVisibleItem + visibleItemCount -1;
                 FirstItemIndex = firstVisibleItem;
             }  
         });
 
+        refreshable = true;
+		myGesture = new GestureDetector(this, new OnGestureListener(){
+
+			@Override
+			public boolean onDown(MotionEvent e) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public void onShowPress(MotionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public boolean onSingleTapUp(MotionEvent e) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean onScroll(MotionEvent e1, MotionEvent e2,
+					float distanceX, float distanceY) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public void onLongPress(MotionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public boolean onFling(MotionEvent e1, MotionEvent e2,
+					float velocityX, float velocityY) {
+					Log.i("Fling", "baseactivity");    
+		          //左滑动  
+		        	//if (e1.getX() - e2.getX() > 80||e1.getY()-e2.getY()>80) 
+		        	if (e1.getX() - e2.getX() > 300) {    
+		            
+		        		Bundle data = new Bundle();
+		        		data.putString("username",username);
+		        		data.putString("id", id);
+		        		data.putString("identity", identity);
+		        		Intent intent = new Intent(StateActivity.this, MemoryActivity.class);
+		        		intent.putExtras(data);
+		        		startActivity(intent);
+		        		StateActivity.this.finish();
+		                
+		                return true;    
+		            }   
+		            //右滑动  
+		            //else if (e1.getX() - e2.getX() <-80||e1.getY()-e2.getY()<-80) 
+			        else if (e1.getX() - e2.getX() <-300){    
+		              
+			        	Bundle data = new Bundle();
+		        		data.putString("username",username);
+		        		data.putString("id", id);
+		        		data.putString("identity", identity);
+		        		Intent intent = new Intent(StateActivity.this, ThingActivity.class);
+		        		intent.putExtras(data);
+		        		startActivity(intent);
+		        		StateActivity.this.finish();
+		                
+		                return true;    
+		            } 
+			        else if ((e1.getY() - e2.getY() <-400) && getRefreshable()){    
+			              
+			        	refreshStateAsyncTask stateTask = new refreshStateAsyncTask();
+		                stateTask.execute();
+		                
+		                return true;    
+		            } 
+				return false;
+			}
+			
+		});//可能需要重写gestureDetector
     }
+	
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent event){
+		View firstChild = list.getChildAt(0);  
+        if (firstChild != null) {  
+            int firstVisiblePos = list.getFirstVisiblePosition();  
+            if (firstVisiblePos == 0 && firstChild.getTop() == 0) { 
+                // 如果首个元素的上边缘，距离父布局值为0，就说明ListView滚动到了最顶部，此时应该允许下拉刷新  
+                setRefreshable(true);  
+            } else {
+            	setRefreshable(false); 
+            }  
+        } else {  
+            // 如果ListView中没有元素，也应该允许下拉刷新  
+        	setRefreshable(true); 
+        }  
+		myGesture.onTouchEvent(event);
+		super.dispatchTouchEvent(event);
+		return true;
+	}
+	
+	private void setStartid(int i){
+		startid = i;
+	}
+	
+	public boolean setRefreshable(boolean status){
+		refreshable = status;
+		return true;
+	}
+	
+	public boolean getRefreshable(){
+		return refreshable;
+	}
 	
 	private class GetStateAsyncTask extends AsyncTask<Void, Void, List<State>> {
 		
@@ -257,6 +359,8 @@ public class StateActivity extends Activity{
 								}
 							} 
 							//map.put("username", ob.getFeedbacks()[i].getCreator().getUserName());
+							feedmap.put("creator", fbCreator);
+							feedmap.put("feedbackId", String.valueOf(ob.getFeedbacks()[i].getId()));
 							feedmap.put("content", fbCreator+" : "+ob.getFeedbacks()[i].getContent());
 							replies.feedback.add(feedmap);
 							map.put("feedbacks", replies);
@@ -264,6 +368,11 @@ public class StateActivity extends Activity{
 						}
 					}else{
 						map.put("feedbacks", null);
+					}
+					if((ob.getPic() != null)){
+						map.put("pic", ob.getPic());
+					}else{
+						map.put("pic", null);
 					}
 					stlist.add(map);  
 				} 
@@ -320,7 +429,8 @@ public class StateActivity extends Activity{
 						feedbackList replies = new feedbackList();
 						HashMap<String, Object> feedmap = null;
 						for(int i=0; i<(ob.getFeedbacks().length); i++){
-							feedmap = new HashMap<String, Object>();String fbCreator;
+							feedmap = new HashMap<String, Object>();
+							String fbCreator;
 							if(ob.getFeedbacks()[i].getCreator().getId() == Integer.parseInt(id)){
 								fbCreator = "Me";
 							}else{
@@ -331,6 +441,8 @@ public class StateActivity extends Activity{
 								}
 							} 
 							//map.put("username", ob.getFeedbacks()[i].getCreator().getUserName());
+							feedmap.put("creator", fbCreator);
+							feedmap.put("feedbackId", String.valueOf(ob.getFeedbacks()[i].getId()));
 							feedmap.put("content", fbCreator+" : "+ob.getFeedbacks()[i].getContent());
 							replies.feedback.add(feedmap);
 							map.put("feedbacks", replies);
@@ -338,6 +450,11 @@ public class StateActivity extends Activity{
 						}
 					}else{
 						map.put("feedbacks", null);
+					}
+					if((ob.getPic() != null)){
+						map.put("pic", ob.getPic());
+					}else{
+						map.put("pic", null);
 					}
 					stlist.add(map);  
 				} 
@@ -351,9 +468,6 @@ public class StateActivity extends Activity{
 		
 	}
 	
-	private void setStartid(int i){
-		startid = i;
-	}
 	
 	public class stateAdapter extends BaseAdapter{
 		
@@ -375,6 +489,7 @@ public class StateActivity extends Activity{
 	        public ImageButton delete;
 	        public ImageButton comment;
 	        public ListView replies;
+	        public ImageView image;
 	    }  
 		
 		@Override
@@ -393,30 +508,69 @@ public class StateActivity extends Activity{
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder = null;  
-	        //if (convertView == null) {  
-	            convertView = inflater.inflate(R.layout.semistateitem, null);  
+	        convertView = inflater.inflate(R.layout.semistateitem, null);  
 	  
-	            holder = new ViewHolder();  
-	            holder.username = (TextView) convertView.findViewById(R.id.ItemUser);  
-	            holder.content = (TextView) convertView.findViewById(R.id.ItemText);  
-	            holder.time = (TextView) convertView.findViewById(R.id.ItemTime);  
-	            holder.delete = (ImageButton) convertView.findViewById(R.id.imageButtonDe);
-	            holder.comment = (ImageButton) convertView.findViewById(R.id.imageButtonRe);
-	            holder.replies = (ListView) convertView.findViewById(R.id.listViewReplies);
-	            convertView.setTag(holder);  
-	        //} else {  
-	        //    holder = (ViewHolder) convertView.getTag();  
-	        //}  
+	        holder = new ViewHolder();  
+	        holder.username = (TextView) convertView.findViewById(R.id.ItemUser);  
+	        holder.content = (TextView) convertView.findViewById(R.id.ItemText);  
+	        holder.time = (TextView) convertView.findViewById(R.id.ItemTime);  
+	        holder.delete = (ImageButton) convertView.findViewById(R.id.imageButtonDe);
+	        holder.comment = (ImageButton) convertView.findViewById(R.id.imageButtonRe);
+	        holder.replies = (ListView) convertView.findViewById(R.id.listViewReplies);
+	        holder.image = (ImageView) convertView.findViewById(R.id.statusimage);
+	        convertView.setTag(holder);  
 	  
 	        item = arrayList.get(position);  
 	        holder.username.setText((String)item.get("username"));  
 	        holder.content.setText((String)item.get("content"));
 	        holder.time.setText((String)item.get("time"));
-	        //此处添加评论区设置
+	        
+	        if(item.get("pic") != null){
+	        	Bitmap imageBitmap = PicFormatTools.getInstance().Bytes2Bitmap((byte[]) item.get("pic"));
+	        	holder.image.setVisibility(View.VISIBLE);
+	        	holder.image.setImageBitmap(imageBitmap);
+	        }else{
+	        	holder.image.setVisibility(View.GONE);
+	        }
+	        
 	        if(item.get("feedbacks")!=null){
-	        	SimpleAdapter mSchedule = new SimpleAdapter(context, ((feedbackList)item.get("feedbacks")).feedback, R.layout.statereply, new String[]{"content"}, new int[]{R.id.stateReply});
+	        	final feedbackList feedbacks = (feedbackList)item.get("feedbacks");
+	        	SimpleAdapter feedbackAdapter = new SimpleAdapter(context, feedbacks.feedback, R.layout.statereply, new String[]{"content"}, new int[]{R.id.stateReply});
 
-	            holder.replies.setAdapter(mSchedule);
+	            holder.replies.setAdapter(feedbackAdapter);
+	            holder.replies.setOnItemLongClickListener(new OnItemLongClickListener(){
+
+					@Override
+					public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+						if(feedbacks.feedback.get(position).get("creator") == "Me"){
+							final int fposition = position;
+							Builder dialog = new AlertDialog.Builder(context);
+							dialog.setIcon(android.R.drawable.btn_star);
+						    dialog.setTitle("Alert").setMessage("Delete this reply?").setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									deleteFeedbackTask deleteFbTask = new deleteFeedbackTask(Integer.parseInt(feedbacks.feedback.get(fposition).get("feedbackId").toString()), fposition, feedbacks);
+				        			deleteFbTask.execute();
+									
+								}
+						    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									;
+								}
+						    });
+						    dialog.show();// show很关键</span>  
+							
+		        			return true;
+						}
+						return false;
+					}
+	            	
+	            });
 	            setListViewHeightBasedOnChildren(holder.replies);
 	        }else{
 	        	holder.replies.setVisibility(View.INVISIBLE);
@@ -437,8 +591,7 @@ public class StateActivity extends Activity{
 	        		Intent intent = new Intent(StateActivity.this, FeedbackCreate.class);
 	        		intent.putExtras(data);
 	        		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	        		startActivity(intent);
-	                // notifyDataSetChanged();  
+	        		startActivity(intent); 
 	            }  
 	        });
 	        
@@ -463,6 +616,43 @@ public class StateActivity extends Activity{
 	  
 	        return convertView;  
 	    }
+		
+		private class deleteFeedbackTask extends AsyncTask<Void, Void, Boolean> {
+			
+			private int feedbackId;
+			private int position;
+			feedbackList feedbacks;
+			
+			public deleteFeedbackTask(int feedbackid, int position, feedbackList feedbacks){
+				this.feedbackId = feedbackid;
+				this.position = position;
+				this.feedbacks = feedbacks;
+			}
+			
+			@Override
+			protected Boolean doInBackground(Void... params) {
+				StateHandlerImpl StateHler = new StateHandlerImpl();
+		        boolean result = StateHler.deleteFeedback(feedbackId);
+		        if(result == true){
+					feedbacks.feedback.remove(position);
+				}else{
+					Log.e("DeleteFeedback","Failed");
+				}
+		        return (new Boolean(result));
+			}
+			
+			@Override
+			protected void onPostExecute(Boolean result) {
+				if(result == true){
+					mSchedule.notifyDataSetChanged();
+				}else{
+					Toast toast = Toast.makeText(getApplicationContext(), "Failed to delete feedback.", Toast.LENGTH_SHORT);
+					toast.setGravity(Gravity.CENTER, 0, 0);
+					toast.show();
+				}
+			}
+			
+		}
 		
 		private class deleteStateAsyncTask extends AsyncTask<Void, Void, Boolean> {
 			
@@ -499,7 +689,6 @@ public class StateActivity extends Activity{
 
 	    ListAdapter listAdapter = listView.getAdapter(); 
 	    if (listAdapter == null) { 
-	        // pre-condition 
 	        return; 
 	    } 
 
@@ -514,6 +703,7 @@ public class StateActivity extends Activity{
 	    params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1)); 
 	    listView.setLayoutParams(params); 
 	}
+
 }
 
 class feedbackList{
