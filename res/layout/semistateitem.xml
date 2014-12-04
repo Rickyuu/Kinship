@@ -6,6 +6,7 @@
    		android:id="@+id/MyListItem"   
     	android:paddingBottom="5dip"   
     	android:paddingLeft="10dip"
+    	android:paddingRight="10dip"
     	>  
     
     	<TextView   

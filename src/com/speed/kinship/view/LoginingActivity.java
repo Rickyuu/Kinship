@@ -59,7 +59,6 @@ public class LoginingActivity extends Activity {
 		setContentView(R.layout.logining);
 		welcome=(TextView) findViewById(R.id.welcome);
 		Intent intent=getIntent();
-		String tr=intent.getStringExtra("id");
 		id=Integer.parseInt(intent.getStringExtra("id"));
 		identity=intent.getStringExtra("identity");
 		userName=intent.getStringExtra("userName");
@@ -143,7 +142,7 @@ public class LoginingActivity extends Activity {
 				startActivity(intent);
 			}
 		};
-		timer.schedule(task, 3000);
+		timer.schedule(task, 5000);
 	}
 }
 

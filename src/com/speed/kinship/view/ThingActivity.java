@@ -37,6 +37,7 @@ public class ThingActivity extends Activity {
 	private Button state;
 	private Button memory;
 	private ImageButton writeThing;
+	private ImageButton setting;
 	
 	private SimpleAdapter myAdapter;
 	private ArrayList<HashMap<String, String>>  mylist;
@@ -60,6 +61,7 @@ public class ThingActivity extends Activity {
 		state=(Button) findViewById(R.id.state);
 		memory=(Button) findViewById(R.id.memory);
 		writeThing=(ImageButton) findViewById(R.id.writeThing);
+		setting=(ImageButton) findViewById(R.id.setting);
 		//user information
 		Intent intent=getIntent();
 		id=Integer.parseInt(intent.getStringExtra("id"));
@@ -71,6 +73,23 @@ public class ThingActivity extends Activity {
 		getThingAsyncTask getThing=new getThingAsyncTask(ThingActivity.this.id,ThingActivity.this.identity,ThingActivity.this.userName);
 		getThing.execute( );
 		
+		
+		setting.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent=new Intent();
+				intent.setClass(ThingActivity.this, settingActivity.class);
+				
+				intent.putExtra("id", String.valueOf(ThingActivity.this.id));
+				intent.putExtra("identity", ThingActivity.this.identity);
+				intent.putExtra("userName",ThingActivity.this.userName);
+				
+				startActivity(intent);
+			}
+			
+		});
 		
 		
 		

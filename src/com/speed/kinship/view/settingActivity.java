@@ -68,7 +68,9 @@ public class settingActivity extends Activity {
 					String mom = file.getString("mother", "");
 					Log.e("result", mom);*/
 				}
+				settingActivity.this.finish();
 			}
+			
         });
         
 	}
