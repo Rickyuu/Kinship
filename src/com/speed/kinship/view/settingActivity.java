@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -37,11 +38,11 @@ public class settingActivity extends Activity {
         numberChi = (EditText) findViewById (R.id.phoneNum3);
         confirm = (Button) findViewById (R.id.settingConfirm);
         
-        /*Intent intent = getIntent();
+        Intent intent = getIntent();
         Bundle b = intent.getExtras();
         username = b.getString("userName");
         id = b.getString("id");
-        identity = b.getString("identity");*/
+        identity = b.getString("identity");
         
         confirm.setOnClickListener(new OnClickListener(){
         	
@@ -55,7 +56,7 @@ public class settingActivity extends Activity {
 					toast.setGravity(Gravity.CENTER, 0, 0);
 					toast.show();
 				}else{
-					SharedPreferences file = getSharedPreferences("kinship_setting", Context.MODE_PRIVATE);
+					SharedPreferences file = getSharedPreferences("kinship_setting"+id, Context.MODE_PRIVATE);
 					Editor editor = file.edit();
 					editor.putString("mother", momPhone);
 					editor.putString("father", dadPhone);
@@ -63,7 +64,7 @@ public class settingActivity extends Activity {
 					editor.commit();
 					
 					/*SystemClock.sleep(1000);
-					file = getSharedPreferences("kinship_setting", Context.MODE_PRIVATE);
+					file = getSharedPreferences("kinship_setting"+id, Context.MODE_PRIVATE);
 					String mom = file.getString("mother", "");
 					Log.e("result", mom);*/
 				}

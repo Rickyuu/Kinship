@@ -10,6 +10,7 @@ import com.speed.kinship.model.Identity;
 import com.speed.kinship.model.Thing;
 import com.speed.kinship.model.User;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -18,14 +19,18 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
+@SuppressLint("SimpleDateFormat") 
 public class ThingCreateActivity extends Activity {
 	private EditText thingTitle;
-	private EditText thingTime;
 	private EditText thingContent;
 	private Button post;
-	
+	private DatePicker chooseDate;
+	private int id;
+	private String identity;
+	private String userName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,17 +38,27 @@ public class ThingCreateActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.thingcreate);
 		thingTitle=(EditText) findViewById(R.id.thingEditTitle);
-		thingTime=(EditText) findViewById(R.id.thingEditTime);
 		thingContent=(EditText) findViewById(R.id.thingEditContent);
 		post=(Button) findViewById(R.id.post);
+		chooseDate=(DatePicker) findViewById(R.id.chooseDate);
 		
-		/*暂时不考虑用户信息传递
-		 * */
+		Intent intent=getIntent();
+		id=Integer.parseInt(intent.getStringExtra("id"));
+		identity=intent.getStringExtra("identity");
+		userName=intent.getStringExtra("userName");
+		
 		final User user=new User();
-		user.setIdentity(Identity.PARENT);
-		user.setUserName("tttty");
-		user.setId(5);
-		//ThingCreateActivity.this.
+		if(identity.equals("PARENT")) {
+			user.setIdentity(Identity.PARENT);
+			user.setUserName(userName);
+			user.setId(id);
+		} else {
+			user.setIdentity(Identity.CHILD);
+			user.setUserName(userName);
+			user.setId(id);
+		}
+		
+		
 		
 		post.setOnClickListener(new OnClickListener() {
 
@@ -51,12 +66,11 @@ public class ThingCreateActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				String title=thingTitle.getText().toString();
-				//String time=thingTime;
-				String time=thingTime.getText().toString();
+				String dateChosen=String.valueOf(chooseDate.getYear())+"-"+String.valueOf(chooseDate.getMonth())+"-"+String.valueOf(chooseDate.getDayOfMonth());
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				Date date=null;
 				try {
-					date = sdf.parse(time);
+					date = sdf.parse(dateChosen);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -64,14 +78,39 @@ public class ThingCreateActivity extends Activity {
 				String content=thingContent.getText().toString();
 				addThingAsyncTask addthing=new addThingAsyncTask(user,title,date,content,null);
 				addthing.execute( );
-				Intent intent=new Intent();
-				intent.setClass(ThingCreateActivity.this, ThingActivity.class);
-				startActivity(intent);
+				
 			}
 			
 		});
 		
 	}
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		
+	}
+	
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
+	
+	
+
+
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+	}
+
+
+
+
 	private class addThingAsyncTask extends AsyncTask<Void,Void, Thing> {
 		private User user;
 		private String title;
@@ -80,7 +119,6 @@ public class ThingCreateActivity extends Activity {
 		private byte[] pic;
 		
 
-		@SuppressWarnings("unused")
 		public addThingAsyncTask(User user, String title, Date time,
 				String content, byte[] pic) {
 			super();
@@ -103,6 +141,13 @@ public class ThingCreateActivity extends Activity {
 			// TODO Auto-generated method stub
 			if(result!=null) {
 				Log.i("Post", "Success!");
+				Intent intent=new Intent();
+				intent.setClass(ThingCreateActivity.this, ThingActivity.class);
+				intent.putExtra("id", String.valueOf(id));
+				intent.putExtra("identity", identity);
+				intent.putExtra("userName",userName);
+				startActivity(intent);
+				
 			} else {
 				Log.i("Post","Fail!");
 			}

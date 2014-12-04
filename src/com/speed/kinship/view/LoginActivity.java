@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.Toast;
 
 public class LoginActivity extends Activity {
 	private EditText account;
@@ -26,10 +27,11 @@ public class LoginActivity extends Activity {
 	private RadioGroup check;
 	private RadioButton parent;
 	private RadioButton child;
-	private int identity;
+	private int identity=1;
+	
 	private String userName=null;
 	private String password=null;
-	private User user;
+	private int id=11111;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +45,16 @@ public class LoginActivity extends Activity {
 		check=(RadioGroup) findViewById(R.id.Identity);
 		parent=(RadioButton) findViewById(R.id.parent);
 		child=(RadioButton) findViewById(R.id.child);
-		
-		
 		check.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				// TODO Auto-generated method stub
-				if(LoginActivity.this.parent.getId()==checkedId) {
-					identity=1;
+				if(checkedId==parent.getId()) {
+					LoginActivity.this.identity=1;
+					Toast.makeText(LoginActivity.this, "identity:parent"+identity, Toast.LENGTH_LONG).show();
 				}
-				if(LoginActivity.this.child.getId()==checkedId) {
-					identity=0;
+				if(checkedId==child.getId()) {
+					LoginActivity.this.identity=0;
+					Toast.makeText(LoginActivity.this, "identity:child"+identity, Toast.LENGTH_LONG).show();
 				}
 				
 			}
@@ -67,13 +69,7 @@ public class LoginActivity extends Activity {
 				password=pwd.getText().toString();
 				LoginAsyncTask loginAsyncTask=new LoginAsyncTask(userName,password,identity);
 				loginAsyncTask.execute( );
-				Intent intent=new Intent();
-//				intent.putExtra("userName", user.getUserName());
-//				intent.putExtra("identity", user.getIdentity());
-//				intent.putExtra("id", String.valueOf(user.getId()));
-				intent.setClass(LoginActivity.this, LoginingActivity.class);
 				
-				startActivity(intent);
 			}
 			
 		});
@@ -91,10 +87,14 @@ public class LoginActivity extends Activity {
 		});
 		
 	}
+	public void setId(int id) {
+		this.id=id;
+	}
 	private class LoginAsyncTask extends AsyncTask<Void, Void, User> {
 		private String username;
 		private String password;
 		private int identity;
+		
 		
 		
 		public LoginAsyncTask(String username,String password, int identity) {
@@ -108,10 +108,14 @@ public class LoginActivity extends Activity {
 			// TODO Auto-generated method stub
 			UserHandler userHandler = new UserHandlerImpl();
 			if(identity==1) {
-				return userHandler.login(username, password, Identity.PARENT);
+				User user=userHandler.login(username, password, Identity.PARENT);
+				id=user.getId();
+				return user;
 			}
 			else if(identity==0) {
-				return userHandler.login(username, password, Identity.CHILD);
+				User user=userHandler.login(username, password, Identity.CHILD);
+				id=user.getId();
+				return user;
 			} else {
 				return null;
 			}
@@ -122,15 +126,19 @@ public class LoginActivity extends Activity {
 		protected void onPostExecute(User result) {
 			// TODO Auto-generated method stub
 			if(result!=null) {
-				LoginActivity.this.user=result;
-				Log.i("Login", "Succeed!");
+				Intent intent=new Intent();
+				intent.putExtra("userName", result.getUserName());
+				intent.putExtra("identity", result.getIdentity().toString());
+				intent.putExtra("id", String.valueOf(result.getId()));
+				intent.setClass(LoginActivity.this, LoginingActivity.class);
+				startActivity(intent);
+				Log.i("Login", "Succeed!"+result.getId());
 			} else {
+				Toast.makeText(LoginActivity.this, "ERROR", Toast.LENGTH_LONG).show();
 				Log.i("Login", "Fail!");
 			}
 		}
-		
-		
-		
+
 	}
 	
 

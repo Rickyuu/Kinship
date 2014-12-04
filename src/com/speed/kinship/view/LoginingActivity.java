@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.speed.kinship.model.Identity;
 import com.speed.kinship.model.User;
 
 import android.app.Activity;
@@ -21,6 +22,7 @@ import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.NetworkInfo.State;
 import android.net.Uri;
@@ -39,8 +41,15 @@ public class LoginingActivity extends Activity {
 	private String num;
 	private int numIndex;
 	private int dateIndex;
-	private String target;
-	private String myPhone;
+	private String lastChild;
+	private String lastMum;
+	private String lastDad;
+	private String phoneNum;
+	private String phoneMum;
+	private String phoneDad;
+	private int id;
+	private String identity;
+	private String userName;
 	
 	
 	@Override
@@ -49,25 +58,22 @@ public class LoginingActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.logining);
 		welcome=(TextView) findViewById(R.id.welcome);
-//		String path="res\\phone.txt";
-//		File file=new File(path);
-//		FileInputStream input;
-//		try {
-//			input = new FileInputStream(file);
-//			InputStreamReader inputReader=new InputStreamReader(input);
-//			
-//			BufferedReader bufferedReader=new BufferedReader(inputReader);
-//			String str=null;
-//			while((str=bufferedReader.readLine())!=null) {
-//				//String[] splited=str.split(",");
-//				myPhone=str;
-//			}
-//			
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		Intent intent=getIntent();
+		String tr=intent.getStringExtra("id");
+		id=Integer.parseInt(intent.getStringExtra("id"));
+		identity=intent.getStringExtra("identity");
+		userName=intent.getStringExtra("userName");
+		SharedPreferences file = getSharedPreferences("kinship_setting"+id, Context.MODE_PRIVATE);
+		String mom = file.getString("mother", "");
+		String dad = file.getString("father", "");
+		String chi = file.getString("child", "");
 		
+		if(identity.equals("PARENT")) {
+			phoneNum=chi;
+		} else if (identity.equals("CHILD")) {
+			phoneMum=mom;
+			phoneDad=dad;
+		}
 		
 		String[] projection = { CallLog.Calls.DATE, // ÈÕÆÚ  
                 CallLog.Calls.NUMBER, // ºÅÂë  
@@ -80,18 +86,47 @@ public class LoginingActivity extends Activity {
 		final Cursor cr=resolver.query(CallLog.Calls.CONTENT_URI, projection, null, null, null);
 		numIndex=cr.getColumnIndex(CallLog.Calls.NUMBER);
 		dateIndex=cr.getColumnIndex(CallLog.Calls.DATE);
-		for(int i=cr.getCount()-1;i>-1;i--) {
-			cr.moveToPosition(i);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			date = new Date(Long.parseLong(cr.getString(dateIndex)));
-			String time = sdf.format(date);
-			num=cr.getString(numIndex);
-			if(num.equals("54897349")) {
-				target=time;
-				break;
+		if(identity.equals("PARENT")) {
+			for(int i=cr.getCount()-1;i>-1;i--) {
+				cr.moveToPosition(i);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				date = new Date(Long.parseLong(cr.getString(dateIndex)));
+				String time = sdf.format(date);
+				num=cr.getString(numIndex);
+				if(num.equals(phoneNum)) {
+					lastChild=time;
+					break;
+				}
 			}
+			welcome.setText("The date of the last contact is "+lastChild);
 		}
-		welcome.setText("The date of the last contact is "+target);
+		if(identity.equals("CHILD")) {
+			for(int i=cr.getCount()-1;i>-1;i--) {
+				cr.moveToPosition(i);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				date = new Date(Long.parseLong(cr.getString(dateIndex)));
+				String time = sdf.format(date);
+				num=cr.getString(numIndex);
+				if((num.equals(phoneMum))) {
+					lastMum=time;
+					break;
+				}
+			}
+			for(int i=cr.getCount()-1;i>-1;i--) {
+				cr.moveToPosition(i);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				date = new Date(Long.parseLong(cr.getString(dateIndex)));
+				String time = sdf.format(date);
+				num=cr.getString(numIndex);
+				if((num.equals(phoneDad))) {
+					lastMum=time;
+					break;
+				}
+			}
+			welcome.setText("The date of the last contact with Mum is"+lastMum+"The date of the last contact with Dad is"+lastDad);
+			
+		}
+		
 		
 		Timer timer=new Timer();
 		TimerTask task=new TimerTask() {
@@ -102,11 +137,13 @@ public class LoginingActivity extends Activity {
 				Intent intent=new Intent();
 				intent=LoginingActivity.this.getIntent();
 				intent.setClass(LoginingActivity.this, ThingActivity.class);
+				intent.putExtra("id", String.valueOf(LoginingActivity.this.id));
+				intent.putExtra("identity", LoginingActivity.this.identity);
+				intent.putExtra("userName",LoginingActivity.this.userName);
 				startActivity(intent);
 			}
-			
 		};
-		timer.schedule(task, 2000);
+		timer.schedule(task, 3000);
 	}
 }
 

@@ -4,54 +4,51 @@
     android:layout_height="match_parent"
     android:background="@drawable/background" >
 
+    <DatePicker
+        android:id="@+id/memoryEditDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/memoryEditTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:calendarViewShown="false" />
+
     <TextView
         android:id="@+id/memoryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="57dp"
+        android:layout_marginTop="46dp"
         android:text="Title"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/memoryTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/memoryTitle"
-        android:layout_marginTop="55dp"
-        android:text="Date"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
         android:id="@+id/memoryEditTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/memoryTime"
-        android:layout_marginLeft="30dp"
-        android:layout_toRightOf="@+id/memoryTitle"
+        android:layout_alignBottom="@+id/memoryTitle"
+        android:layout_centerHorizontal="true"
         android:ems="10" />
+
+    <TextView
+        android:id="@+id/memoryTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/memoryEditDate"
+        android:layout_marginTop="46dp"
+        android:text="Date"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
         android:id="@+id/memoryPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/memoryEditTime"
-        android:layout_below="@+id/memoryEditTime"
-        android:layout_marginTop="120dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/memoryEditDate"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="86dp"
         android:text="Post" />
-
-    <EditText
-        android:id="@+id/memoryEditTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/memoryTime"
-        android:layout_alignLeft="@+id/memoryEditTitle"
-        android:ems="10"
-        android:inputType="date" >
-
-        <requestFocus />
-    </EditText>
 
 </RelativeLayout>

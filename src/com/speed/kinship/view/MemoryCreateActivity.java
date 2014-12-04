@@ -10,6 +10,7 @@ import com.speed.kinship.model.Identity;
 import com.speed.kinship.model.Memory;
 import com.speed.kinship.model.User;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -18,12 +19,18 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
-public class MemoryCreateActivity extends Activity {
+@SuppressLint("SimpleDateFormat") public class MemoryCreateActivity extends Activity {
 	private EditText memoryTitleEdit;
-	private EditText memoryTimeEdit;
+	
+	private DatePicker memoryDate;
+	
 	private Button memoryPost;
+	private int id;
+	private String identity;
+	private String userName;
 	
 
 	@Override
@@ -32,13 +39,26 @@ public class MemoryCreateActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.memorycreate);
 		memoryTitleEdit=(EditText) findViewById(R.id.memoryEditTitle);
-		memoryTimeEdit=(EditText) findViewById(R.id.memoryEditTime);
 		memoryPost=(Button) findViewById(R.id.memoryPost);
 		
+		memoryDate=(DatePicker) findViewById(R.id.memoryEditDate);
+		
+		Intent intent=getIntent();
+		id=Integer.parseInt(intent.getStringExtra("id"));
+		identity=intent.getStringExtra("identity");
+		userName=intent.getStringExtra("userName");
+
 		final User user=new User();
-		user.setIdentity(Identity.PARENT);
-		user.setUserName("tttty");
-		user.setId(5);
+		if(identity.equals("PARENT")) {
+			user.setIdentity(Identity.PARENT);
+			user.setUserName(userName);
+			user.setId(id);
+		} else {
+			user.setIdentity(Identity.CHILD);
+			user.setUserName(userName);
+			user.setId(id);
+		}
+		
 		
 		memoryPost.setOnClickListener(new OnClickListener(){
 
@@ -46,20 +66,19 @@ public class MemoryCreateActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				String title=memoryTitleEdit.getText().toString();
-				String time=memoryTimeEdit.getText().toString();
+				//String time=memoryTimeEdit.getText().toString();
+				String dateChosen=String.valueOf(memoryDate.getYear())+"-"+String.valueOf(memoryDate.getMonth())+"-"+String.valueOf(memoryDate.getDayOfMonth());
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				Date date=null;
 				try {
-					date = sdf.parse(time);
+					date = sdf.parse(dateChosen);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				addMemoryAsyncTask addMemory=new addMemoryAsyncTask(user,date,title);
 				addMemory.execute( );
-				Intent intent=new Intent();
-				intent.setClass(MemoryCreateActivity.this, MemoryActivity.class);
-				startActivity(intent);
+				
 			}
 			
 		});
@@ -92,6 +111,12 @@ public class MemoryCreateActivity extends Activity {
 			// TODO Auto-generated method stub
 			if(result!=null) {
 				Log.i("memoryadd", "success");
+				Intent intent=new Intent();
+				intent.setClass(MemoryCreateActivity.this, MemoryActivity.class);
+				intent.putExtra("id", String.valueOf(id));
+				intent.putExtra("identity", identity);
+				intent.putExtra("userName",userName);
+				startActivity(intent);
 			} else {
 				Log.i("memoryadd","fail");
 			}

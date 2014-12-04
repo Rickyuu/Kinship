@@ -35,6 +35,10 @@ public class MemoryActivity extends Activity {
 	private Button memory;
 	private myAdapter mAdapter;
 	private ArrayList<HashMap<String, String>>  myList=new ArrayList<HashMap<String, String>>();
+	
+	private int id;
+	private String identity;
+	private String userName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,12 @@ public class MemoryActivity extends Activity {
 		timeLine=(Button) findViewById(R.id.timeLine3);
 		state=(Button) findViewById(R.id.state3);
 		memory=(Button) findViewById(R.id.memory3);
+		
+		Intent intent=getIntent();
+		id=Integer.parseInt(intent.getStringExtra("id"));
+		identity=intent.getStringExtra("identity");
+		userName=intent.getStringExtra("userName");
+		
 		getMemoryAsyncTask getMemory=new getMemoryAsyncTask();
 		getMemory.execute( );
 		
@@ -57,10 +67,14 @@ public class MemoryActivity extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent=new Intent();
 				intent.setClass(MemoryActivity.this, MemoryCreateActivity.class);
+				intent.putExtra("id", String.valueOf(id));
+				intent.putExtra("identity", identity);
+				intent.putExtra("userName",userName);
 				startActivity(intent);
 			}
 			
 		});
+		//jump to timeline
 		timeLine.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -68,11 +82,15 @@ public class MemoryActivity extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent=new Intent();
 				intent.setClass(MemoryActivity.this, ThingActivity.class);
+				intent.putExtra("id", String.valueOf(id));
+				intent.putExtra("identity", identity);
+				intent.putExtra("userName",userName);
 				startActivity(intent);
 			}
 			
 			
 		});
+		//jump to state
 		state.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -80,6 +98,9 @@ public class MemoryActivity extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent=new Intent();
 				intent.setClass(MemoryActivity.this, StateActivity.class);
+				intent.putExtra("id", String.valueOf(id));
+				intent.putExtra("identity", identity);
+				intent.putExtra("userName",userName);
 				startActivity(intent);
 			}
 		});	
@@ -90,6 +111,9 @@ public class MemoryActivity extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent=new Intent();
 				intent.setClass(MemoryActivity.this, MemoryActivity.class);
+				intent.putExtra("id", String.valueOf(id));
+				intent.putExtra("identity", identity);
+				intent.putExtra("userName",userName);
 				startActivity(intent);
 			}
 			
@@ -110,7 +134,7 @@ public class MemoryActivity extends Activity {
 		protected List<Memory> doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			MemoryHandler memoryHandler=new MemoryHandlerImpl();
-			return memoryHandler.getAllMemories("tttty");
+			return memoryHandler.getAllMemories(MemoryActivity.this.userName);
 		}
 
 		@Override

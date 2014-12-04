@@ -8,16 +8,16 @@ import java.util.List;
 
 import com.speed.kinship.controller.ThingHandler;
 import com.speed.kinship.controller.impl.ThingHandlerImpl;
-import com.speed.kinship.model.State;
 import com.speed.kinship.model.Thing;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ListActivity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AbsListView;
@@ -28,7 +28,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Toast;
 
  
 public class ThingActivity extends Activity {
@@ -43,9 +42,11 @@ public class ThingActivity extends Activity {
 	private ArrayList<HashMap<String, String>>  mylist;
 	private ArrayList<Thing> thiList=new ArrayList<Thing>();
 	private Date lastdate;
+	private int id;
+	private String identity;
+	private String userName;
 	
-	
-
+	MyBroadcast broadcastReceiver=null;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -59,9 +60,18 @@ public class ThingActivity extends Activity {
 		state=(Button) findViewById(R.id.state);
 		memory=(Button) findViewById(R.id.memory);
 		writeThing=(ImageButton) findViewById(R.id.writeThing);
+		//user information
+		Intent intent=getIntent();
+		id=Integer.parseInt(intent.getStringExtra("id"));
+		identity=intent.getStringExtra("identity");
+		userName=intent.getStringExtra("userName");
 		
-		getThingAsyncTask getThing=new getThingAsyncTask();
+		
+		
+		getThingAsyncTask getThing=new getThingAsyncTask(ThingActivity.this.id,ThingActivity.this.identity,ThingActivity.this.userName);
 		getThing.execute( );
+		
+		
 		
 		
 		thingList.setOnItemClickListener(new OnItemClickListener(){
@@ -75,12 +85,19 @@ public class ThingActivity extends Activity {
 				intent.putExtra("title", map.get("title"));
 				intent.putExtra("time", map.get("time"));
 				intent.putExtra("content", map.get("content"));
-				intent.putExtra("id", map.get("id"));
+				intent.putExtra("thingId", map.get("thingId"));
 				intent.putExtra("userId", map.get("userId"));
+				intent.putExtra("position", String.valueOf(position));
+				
+				intent.putExtra("id", String.valueOf(ThingActivity.this.id));
+				intent.putExtra("identity", ThingActivity.this.identity);
+				intent.putExtra("userName",ThingActivity.this.userName);
+				
 				//Toast.makeText(getApplicationContext(), map.toString(), Toast.LENGTH_SHORT).show();
 				intent.setClass(ThingActivity.this, ThingContentActivity.class);
 				startActivity(intent);
 			}
+			
 			
 		});
 		thingList.setOnScrollListener(new OnScrollListener() {
@@ -90,7 +107,8 @@ public class ThingActivity extends Activity {
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				// TODO Auto-generated method stub
 				if(isBottom&& scrollState==OnScrollListener.SCROLL_STATE_IDLE) {
-					getNextNThingAsyncTask nextN=new getNextNThingAsyncTask();
+					int pos=thingList.getLastVisiblePosition();
+					getNextNThingAsyncTask nextN=new getNextNThingAsyncTask(ThingActivity.this.id,ThingActivity.this.identity,ThingActivity.this.userName);
 					nextN.execute();
 					
 					isBottom=false;
@@ -112,17 +130,19 @@ public class ThingActivity extends Activity {
 			}
 			
 		});
+		//refresh timeline
 		timeLine.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				thiList=new ArrayList<Thing>();
-				getThingAsyncTask getthing=new getThingAsyncTask();
+				getThingAsyncTask getthing=new getThingAsyncTask(ThingActivity.this.id,ThingActivity.this.identity,ThingActivity.this.userName);
 				getthing.execute( );
 			}
 			
 		});
+		//jump to state
 		state.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -131,10 +151,14 @@ public class ThingActivity extends Activity {
 				Intent intent=new Intent();
 				intent=ThingActivity.this.getIntent();
 				intent.setClass(ThingActivity.this, StateActivity.class);
+				intent.putExtra("id", String.valueOf(id));
+				intent.putExtra("identity", identity);
+				intent.putExtra("userName",userName);
 				startActivity(intent);
 			}
 			
 		});
+		//jump to memory
 		memory.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -142,6 +166,9 @@ public class ThingActivity extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent=new Intent();
 				intent.setClass(ThingActivity.this,MemoryActivity.class);
+				intent.putExtra("id", String.valueOf(id));
+				intent.putExtra("identity", identity);
+				intent.putExtra("userName",userName);
 				startActivity(intent);
 			}
 			
@@ -153,16 +180,75 @@ public class ThingActivity extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent=new Intent();
 				intent.setClass(ThingActivity.this,ThingCreateActivity.class);
+				intent.putExtra("id", String.valueOf(id));
+				intent.putExtra("identity", identity);
+				intent.putExtra("userName",userName);
 				startActivity(intent);
 			}
 			
 		});
 		
 	}
+	private class MyBroadcast extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			int delete=Integer.parseInt(intent.getStringExtra("position"));
+			mylist.remove(delete);
+			myAdapter.notifyDataSetChanged();
+		}
+		
+	}
 	
-	private class getNextNThingAsyncTask extends AsyncTask<Void,Void,List<Thing>> {
+	
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		
+	}
+	
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		MyBroadcast broadcastReceiver=new MyBroadcast();
+		IntentFilter filter = new IntentFilter("DELETE_POSITION");
+		registerReceiver(broadcastReceiver, filter);
+		
+	}
+	
+	
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+	}
+
+
+
+
+
+
+
+	@SuppressLint("SimpleDateFormat") private class getNextNThingAsyncTask extends AsyncTask<Void,Void,List<Thing>> {
+		private int id;
+		@SuppressWarnings("unused")
+		private String identity;
+		private String userName;
 		
 
+		public getNextNThingAsyncTask(int id, String identity, String userName) {
+			this.id = id;
+			this.identity = identity;
+			this.userName = userName;
+		}
+
+		@SuppressWarnings("unused")
 		public getNextNThingAsyncTask() {
 			super();
 			// TODO Auto-generated constructor stub
@@ -172,7 +258,7 @@ public class ThingActivity extends Activity {
 		protected List<Thing> doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			ThingHandler thingHandler=new ThingHandlerImpl();
-			return thingHandler.getNextNThings("tttty", ThingActivity.this.lastdate, 5);
+			return thingHandler.getNextNThings(userName, ThingActivity.this.lastdate, id);
 		}
 
 		@Override
@@ -189,7 +275,7 @@ public class ThingActivity extends Activity {
 				hm.put("time", str);
 				hm.put("title", temp.getTitle());
 				hm.put("content",temp.getContent());
-				hm.put("id",String.valueOf(temp.getId()));
+				hm.put("thingId",String.valueOf(temp.getId()));
 				hm.put("userId", String.valueOf(temp.getCreator().getId()));
 				mylist.add(hm);
 				if(i==thiList.size()-1) {
@@ -206,13 +292,24 @@ public class ThingActivity extends Activity {
 		
 	}
 	
+	@SuppressLint("SimpleDateFormat") 
 	private class getThingAsyncTask extends AsyncTask<Void, Void, List<Thing>> {
+		private int id;
+		@SuppressWarnings("unused")
+		private String identity;
+		private String userName;
+		
+		public getThingAsyncTask(int id, String identity, String userName) {
+			this.id = id;
+			this.identity = identity;
+			this.userName = userName;
+		}
 
 		@Override
 		protected List<Thing> doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			ThingHandler thingHandler=new ThingHandlerImpl();
-			return thingHandler.getFirstNThings("tttty", 5);
+			return thingHandler.getFirstNThings(userName, id);
 		}
 
 		@Override
@@ -230,7 +327,7 @@ public class ThingActivity extends Activity {
 				hm.put("time", str);
 				hm.put("title", temp.getTitle());
 				hm.put("content",temp.getContent());
-				hm.put("id",String.valueOf(temp.getId()));
+				hm.put("thingId",String.valueOf(temp.getId()));
 				hm.put("userId", String.valueOf(temp.getCreator().getId()));
 				mylist.add(hm);
 				if(i==thiList.size()-1) {
@@ -241,11 +338,6 @@ public class ThingActivity extends Activity {
 					new String[]{"time","title"},
 					new int[]{R.id.timeLineTime,R.id.timeLineTitle});
 			thingList.setAdapter(myAdapter);
-		}
-
-		public getThingAsyncTask() {
-			super();
-			// TODO Auto-generated constructor stub
 		}
 		
 	}
