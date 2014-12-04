@@ -234,7 +234,7 @@ public class ThingActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		MyBroadcast broadcastReceiver=new MyBroadcast();
+		broadcastReceiver=new MyBroadcast();
 		IntentFilter filter = new IntentFilter("DELETE_POSITION");
 		registerReceiver(broadcastReceiver, filter);
 		
@@ -247,13 +247,18 @@ public class ThingActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onStop();
 	}
+	
+	
 
 
 
-
-
-
-
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		unregisterReceiver( broadcastReceiver);
+	}
+	
 	@SuppressLint("SimpleDateFormat") private class getNextNThingAsyncTask extends AsyncTask<Void,Void,List<Thing>> {
 		private int id;
 		@SuppressWarnings("unused")

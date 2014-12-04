@@ -74,10 +74,12 @@ public class ThingContentActivity extends Activity {
 		protected void onPostExecute(Boolean result) {
 			// TODO Auto-generated method stub
 			if(result==true) {
+				Log.i("delete", "success!");
+				
 				Intent intent=new Intent(ACTION_INTENT);
 				intent.putExtra("position", String.valueOf(ThingContentActivity.this.position));
 				sendBroadcast(intent);
-				Log.i("delete", "success!");
+				
 				ThingContentActivity.this.finish();
 			} else {
 				Log.i("delete","fail!");

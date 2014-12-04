@@ -78,14 +78,14 @@ public class StateActivity extends Activity{
         status = (Button) findViewById(R.id.create);
         memory = (Button) findViewById(R.id.button3);
         
-        /*Intent intent = getIntent();
+        Intent intent = getIntent();
         Bundle b = intent.getExtras();
         username = b.getString("userName");//待修改，主要获取username
         id = b.getString("id");
-        identity = b.getString("identity");*/
-        username = new String("echo");
-        id = new String("3");
-        identity = new String("PARENT");
+        identity = b.getString("identity");
+        //username = new String("echo");
+        //id = new String("3");
+        //identity = new String("PARENT");
         setStartid(-1);
         stlist = new ArrayList<HashMap<String, Object>>();
         
@@ -104,7 +104,7 @@ public class StateActivity extends Activity{
         	@Override
         	public void onClick(View v){
         		Bundle data = new Bundle();
-        		data.putString("username",username);
+        		data.putString("userName",username);
         		data.putString("id", id);
         		data.putString("identity", identity);
         		Intent intent = new Intent(StateActivity.this, StateCreateActivity.class);
@@ -119,7 +119,7 @@ public class StateActivity extends Activity{
         	@Override
         	public void onClick(View v){
         		Bundle data = new Bundle();
-        		data.putString("username",username);
+        		data.putString("userName",username);
         		data.putString("id", id);
         		data.putString("identity", identity);
         		Intent intent = new Intent(StateActivity.this, settingActivity.class);
@@ -133,7 +133,7 @@ public class StateActivity extends Activity{
         	@Override
         	public void onClick(View v){
         		Bundle data = new Bundle();
-        		data.putString("username",username);
+        		data.putString("userName",username);
         		data.putString("id", id);
         		data.putString("identity", identity);
         		Intent intent = new Intent(StateActivity.this, ThingActivity.class);
@@ -157,7 +157,7 @@ public class StateActivity extends Activity{
         	@Override
         	public void onClick(View v){
         		Bundle data = new Bundle();
-        		data.putString("username",username);
+        		data.putString("userName",username);
         		data.putString("id", id);
         		data.putString("identity", identity);
         		Intent intent = new Intent(StateActivity.this, MemoryActivity.class);
@@ -229,7 +229,7 @@ public class StateActivity extends Activity{
 		        	if (e1.getX() - e2.getX() > 300) {    
 		            
 		        		Bundle data = new Bundle();
-		        		data.putString("username",username);
+		        		data.putString("userName",username);
 		        		data.putString("id", id);
 		        		data.putString("identity", identity);
 		        		Intent intent = new Intent(StateActivity.this, MemoryActivity.class);
@@ -244,7 +244,7 @@ public class StateActivity extends Activity{
 			        else if (e1.getX() - e2.getX() <-300){    
 		              
 			        	Bundle data = new Bundle();
-		        		data.putString("username",username);
+		        		data.putString("userName",username);
 		        		data.putString("id", id);
 		        		data.putString("identity", identity);
 		        		Intent intent = new Intent(StateActivity.this, ThingActivity.class);

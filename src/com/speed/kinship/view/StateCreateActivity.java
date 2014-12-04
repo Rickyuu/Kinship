@@ -69,7 +69,7 @@ public class StateCreateActivity extends Activity {
 					PostStateAsyncTask postState = new PostStateAsyncTask(username, id, identity, context, imageBitmap);
 					postState.execute();
 					Bundle data = new Bundle();
-	        		data.putString("username",username);
+	        		data.putString("userName",username);
 	        		data.putString("id", id);
 	        		data.putString("identity", identity);
 	        		Intent intent = new Intent(StateCreateActivity.this, StateActivity.class);
