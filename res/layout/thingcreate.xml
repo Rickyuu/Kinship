@@ -4,24 +4,6 @@
     android:layout_height="match_parent"
     android:gravity="center" >
 
-    <TextView
-        android:id="@+id/thingTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/chooseDate"
-        android:layout_marginTop="49dp"
-        android:text="Time"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <EditText
-        android:id="@+id/thingEditTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:ems="10" />
-
     <Button
         android:id="@+id/post"
         android:layout_width="wrap_content"
@@ -38,18 +20,6 @@
         android:layout_alignParentLeft="true"
         android:text="picture" />
 
-    <EditText
-        android:id="@+id/thingEditContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/thingContent"
-        android:layout_toRightOf="@+id/chooseThingPic"
-        android:ems="10"
-        android:inputType="textMultiLine" >
-
-        <requestFocus />
-    </EditText>
-
     <DatePicker
         android:id="@+id/chooseDate"
         android:layout_width="wrap_content"
@@ -58,32 +28,36 @@
         android:layout_centerHorizontal="true"
         android:calendarViewShown="false" />
 
-    <TextView
-        android:id="@+id/thingTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/thingTime"
-        android:layout_alignParentLeft="true"
-        android:text="Title"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/thingContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/chooseDate"
-        android:layout_marginTop="19dp"
-        android:text="Content"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
     <ImageView
         android:id="@+id/imageAttachThing"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignLeft="@+id/thingEditTitle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_below="@+id/thingEditContent"
-        android:layout_marginTop="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="76dp"
         android:src="@android:drawable/screen_background_light_transparent" />
+
+    <EditText
+        android:id="@+id/thingEditContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/thingEditTitle"
+        android:layout_below="@+id/chooseDate"
+        android:ems="10"
+        android:hint="Context"
+        android:inputType="textMultiLine" />
+
+    <EditText
+        android:id="@+id/thingEditTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:ems="10"
+        android:hint="Title" >
+
+        <requestFocus />
+    </EditText>
 
 </RelativeLayout>

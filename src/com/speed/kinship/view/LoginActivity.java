@@ -140,8 +140,9 @@ public class LoginActivity extends Activity {
 				intent.setClass(LoginActivity.this, LoginingActivity.class);
 				startActivity(intent);
 				Log.i("Login", "Succeed!"+result.getId());
+				LoginActivity.this.finish();
 			} else {
-				Toast.makeText(LoginActivity.this, "Wrong username or password! Please try again!", Toast.LENGTH_LONG).show();
+				Toast.makeText(LoginActivity.this, "Wrong username or password! Please try again!", Toast.LENGTH_SHORT).show();
 				Log.i("Login", "Fail!");
 			}
 		}

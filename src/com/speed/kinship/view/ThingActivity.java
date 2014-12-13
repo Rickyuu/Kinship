@@ -199,6 +199,7 @@ public class ThingActivity extends Activity {
 				intent.putExtra("identity", identity);
 				intent.putExtra("userName",userName);
 				startActivity(intent);
+				ThingActivity.this.finish();
 			}
 			
 		});
@@ -214,6 +215,7 @@ public class ThingActivity extends Activity {
 				intent.putExtra("identity", identity);
 				intent.putExtra("userName",userName);
 				startActivity(intent);
+				ThingActivity.this.finish();
 			}
 			
 		});
@@ -357,7 +359,9 @@ public class ThingActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		
+		thiList=new ArrayList<Thing>();
+		getThingAsyncTask getthing=new getThingAsyncTask(10,ThingActivity.this.identity,ThingActivity.this.userName);
+		getthing.execute( );
 	}
 	
 	

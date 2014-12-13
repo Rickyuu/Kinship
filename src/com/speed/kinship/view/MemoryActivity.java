@@ -103,6 +103,7 @@ public class MemoryActivity extends Activity {
 				intent.putExtra("identity", identity);
 				intent.putExtra("userName",userName);
 				startActivity(intent);
+				MemoryActivity.this.finish();
 			}
 			
 			
@@ -119,6 +120,7 @@ public class MemoryActivity extends Activity {
 				intent.putExtra("identity", identity);
 				intent.putExtra("userName",userName);
 				startActivity(intent);
+				MemoryActivity.this.finish();
 			}
 		});	
 		memory.setOnClickListener(new OnClickListener() {
@@ -242,7 +244,20 @@ public class MemoryActivity extends Activity {
 		public boolean getRefreshable(){
 			return refreshable;
 		}
+		
 	
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		refreshMemoryAsyncTask refresh=new refreshMemoryAsyncTask();
+		refresh.execute( );
+		
+	}
+
+
+
 	private class getMemoryAsyncTask extends AsyncTask<Void,Void,List<Memory>> {
 		
 

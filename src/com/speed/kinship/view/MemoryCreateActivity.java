@@ -111,12 +111,13 @@ import android.widget.EditText;
 			// TODO Auto-generated method stub
 			if(result!=null) {
 				Log.i("memoryadd", "success");
-				Intent intent=new Intent();
-				intent.setClass(MemoryCreateActivity.this, MemoryActivity.class);
-				intent.putExtra("id", String.valueOf(id));
-				intent.putExtra("identity", identity);
-				intent.putExtra("userName",userName);
-				startActivity(intent);
+//				Intent intent=new Intent();
+//				intent.setClass(MemoryCreateActivity.this, MemoryActivity.class);
+//				intent.putExtra("id", String.valueOf(id));
+//				intent.putExtra("identity", identity);
+//				intent.putExtra("userName",userName);
+//				startActivity(intent);
+				MemoryCreateActivity.this.finish();
 			} else {
 				Log.i("memoryadd","fail");
 			}
