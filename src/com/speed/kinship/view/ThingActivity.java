@@ -79,6 +79,7 @@ public class ThingActivity extends Activity {
 		LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 		listFooter = layoutInflater.inflate(R.layout.loadingfooter, null);
 		mylist = new ArrayList<HashMap<String, Object>>();
+		thiList=new ArrayList<Thing>();
 		myAdapter=new SimpleAdapter(ThingActivity.this,mylist,R.layout.timelineitem,
 				new String[]{"time","title"},
 				new int[]{R.id.timeLineTime,R.id.timeLineTitle});
@@ -182,6 +183,7 @@ public class ThingActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				thiList=new ArrayList<Thing>();
+				mylist = new ArrayList<HashMap<String, Object>>();
 				getThingAsyncTask getthing=new getThingAsyncTask(10,ThingActivity.this.identity,ThingActivity.this.userName);
 				getthing.execute( );
 			}
@@ -306,6 +308,7 @@ public class ThingActivity extends Activity {
 		            else if ((e1.getY() - e2.getY() <-400) && getRefreshable()){    
 			              
 		            	thiList=new ArrayList<Thing>();
+		            	mylist = new ArrayList<HashMap<String, Object>>();
 						getThingAsyncTask getthing=new getThingAsyncTask(10, ThingActivity.this.identity,ThingActivity.this.userName);
 						getthing.execute( );
 		                
@@ -360,9 +363,7 @@ public class ThingActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		thiList=new ArrayList<Thing>();
-		getThingAsyncTask getthing=new getThingAsyncTask(10,ThingActivity.this.identity,ThingActivity.this.userName);
-		getthing.execute( );
+		
 	}
 	
 	
