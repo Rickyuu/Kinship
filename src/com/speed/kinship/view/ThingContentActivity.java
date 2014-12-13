@@ -76,9 +76,9 @@ public class ThingContentActivity extends Activity {
 			if(result==true) {
 				Log.i("delete", "success!");
 				
-				Intent intent=new Intent(ACTION_INTENT);
+				Intent intent=new Intent( );
 				intent.putExtra("position", String.valueOf(ThingContentActivity.this.position));
-				sendBroadcast(intent);
+				setResult(Activity.RESULT_OK,intent);
 				
 				ThingContentActivity.this.finish();
 			} else {

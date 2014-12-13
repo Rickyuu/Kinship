@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center" >
 
     <Button
         android:id="@+id/post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/thingEditContent"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="5dp"
         android:text="Post" />
 
     <TextView
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/post"
         android:text="Title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -45,7 +45,7 @@
         android:id="@+id/thingEditTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/post"
         android:layout_centerHorizontal="true"
         android:ems="10" />
 

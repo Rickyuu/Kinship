@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:gravity="center" >
 
     <TextView
         android:id="@+id/thingTitle"
@@ -43,14 +44,37 @@
         android:layout_alignLeft="@+id/thingEditTime"
         android:ems="10"
         android:inputType="textPassword" />
+    
+    <RadioGroup
+        android:id="@+id/registerIdentity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/thingEditTitle"
+        android:layout_below="@+id/thingEditTitle"
+        android:orientation="horizontal"
+        android:layout_marginTop="25dp" >
+
+        <RadioButton
+            android:id="@+id/registerparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="parent" />
+
+        <RadioButton
+            android:id="@+id/registerchild"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="child" />
+    </RadioGroup>
 
     <Button
         android:id="@+id/timeLine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/thingEditTitle"
-        android:layout_below="@+id/thingEditTitle"
-        android:layout_marginTop="137dp"
+        android:layout_below="@+id/registerIdentity"
+        android:layout_marginTop="50dp"
         android:text="Create" />
 
 </RelativeLayout>

@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent" 
+    android:paddingTop="15dip"
+    android:paddingBottom="15dip"
+    android:paddingLeft="25dip"
+    android:paddingRight="10dip">
 
     <ImageButton
         android:id="@+id/memoryDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/memoryTime"
+        android:layout_below="@+id/memoryContent"
         android:focusable="false"
-        android:src="@android:drawable/ic_menu_delete" />
+        android:src="@drawable/delete" 
+       	android:background="#00000000"
+       	android:layout_marginRight="10dp" />
 
     <TextView
         android:id="@+id/memoryContent"
@@ -18,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Large Text"
+        android:textSize="23sp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -26,8 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/memoryContent"
-        android:layout_centerHorizontal="true"
-        android:text="Large Text"
+        android:layout_alignParentLeft="true"
+        android:textSize="20sp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>
