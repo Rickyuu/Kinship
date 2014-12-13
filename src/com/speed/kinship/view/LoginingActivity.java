@@ -17,6 +17,7 @@ import java.util.TimerTask;
 import com.speed.kinship.model.Identity;
 import com.speed.kinship.model.User;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
@@ -38,8 +39,8 @@ public class LoginingActivity extends Activity {
 	private TextView welcome;
 	//private ProgressBar p;
 	
-	private Date date;
-	private String num;
+	
+	
 	private int numIndex;
 	private int dateIndex;
 	private String lastChild;
@@ -53,7 +54,7 @@ public class LoginingActivity extends Activity {
 	private String userName;
 	
 	
-	@Override
+	@SuppressLint("SimpleDateFormat") @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -88,52 +89,101 @@ public class LoginingActivity extends Activity {
 		dateIndex=cr.getColumnIndex(CallLog.Calls.DATE);
 		boolean Momflag=true;
 		boolean Dadflag=true;
-		if(identity.equals("PARENT")) {
-			for(int i=0;i<cr.getCount();i++) {
-				cr.moveToPosition(i);
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				date = new Date(Long.parseLong(cr.getString(dateIndex)));
-				String time = sdf.format(date);
-				num=cr.getString(numIndex);
-				System.out.println(time+" ");
-				
-				if(num.equals(phoneNum)) {
-					lastChild=time;
+		boolean Childflag=true;
+		boolean MomflagOpposite=true;
+		boolean ChildflagOpposite=true;
+		boolean DadflagOpposite=true;
+		String tempChild=null;
+		String tempChildOpposite=null;
+		String tempMom=null;
+		String tempMomOpposite=null;
+		String tempDad=null;
+		String tempDadOpposite=null;
+		Date date;
+		Date date2;
+		String num;
+		String num2;
+		
+		for(int i=0;i<cr.getCount();i++) {
+			cr.moveToPosition(i);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			date = new Date(Long.parseLong(cr.getString(dateIndex)));
+			String time = sdf.format(date);
+			num=cr.getString(numIndex);
+			//
+			cr.moveToPosition(cr.getCount()-1-i);
+			date2 =new Date(Long.parseLong(cr.getString(dateIndex)));
+			String time2 =sdf.format(date2);
+			num2=cr.getString(numIndex);
+			
+			if(identity.equals("PARENT")) {
+				if(Childflag) {
+					if(num.equals(phoneNum)) {
+						tempChild=time;
+						Childflag=false;
+					}
+				}
+				if(ChildflagOpposite) {
+					if(num2.equals(phoneNum)) {
+						tempChildOpposite=time2;
+						ChildflagOpposite=false;
+					}
+				}
+				if((Childflag==false)&&(ChildflagOpposite==false)) {
+					if(tempChild.compareTo(tempChildOpposite)>0) {
+						lastChild=tempChild;
+					} else {
+						lastChild=tempChildOpposite;
+					}
+					welcome.setText("The date of the last contact is\n"+lastChild);
 					break;
 				}
+				
 			}
-			welcome.setText("The date of the last contact is\n"+lastChild);
-		}
-		if(identity.equals("CHILD")) {
-			for(int i=0;i<cr.getCount();i++) {
-				cr.moveToPosition(i);
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				date = new Date(Long.parseLong(cr.getString(dateIndex)));
-				String time = sdf.format(date);
-				num=cr.getString(numIndex);
-                if(Momflag) {
+			if(identity.equals("CHILD")) {
+				if(Momflag) {
                 	if((num.equals(phoneMum))) {
-    					lastMum=time;
+    					tempMom=time;
     					Momflag=false;
+    				}
+				}
+				if(MomflagOpposite) {
+					if((num2.equals(phoneMum))) {
+    					tempMomOpposite=time2;
+    					MomflagOpposite=false;
     				}
 				}
                 if(Dadflag) {
                 	if((num.equals(phoneDad))) {
-    					lastMum=time;
+    					tempDad=time;
     					Dadflag=false;
     				}
                 }
-                if((Momflag==false)&&(Dadflag==false)) {
+                
+                if(DadflagOpposite) {
+                	if((num2.equals(phoneDad))) {
+    					tempDadOpposite=time2;
+    					DadflagOpposite=false;
+    				}
+                }
+                if((Momflag==false)&&(Dadflag==false)&&(DadflagOpposite==false)&&(MomflagOpposite==false)) {
+                	if(tempMom.compareTo(tempMomOpposite)>0) {
+                		lastMum=tempMom;
+                	} else {
+                		lastMum=tempMomOpposite;
+                	}
+                	if(tempDad.compareTo(tempDadOpposite)>0) {
+                		lastDad=tempDad;
+                	} else {
+                		lastDad=tempDadOpposite;
+                	}
+                	welcome.setText("The date of the last contact is\nwith mum: "+lastMum+"\nwith dad: "+lastDad);
+        			welcome.setGravity(Gravity.CENTER);
                 	break;
                 }
                 
-				
 			}
-			welcome.setText("The date of the last contact is\nwith mum: "+lastMum+"\nwith dad: "+lastDad);
-			welcome.setGravity(Gravity.CENTER);
-			
 		}
-		
 		
 		Timer timer=new Timer();
 		TimerTask task=new TimerTask() {
