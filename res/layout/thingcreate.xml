@@ -3,34 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/post"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/thingEditContent"
-        android:layout_marginBottom="80dp"
-        android:text="Post" />
-
-    <TextView
-        android:id="@+id/thingTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Title"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <EditText
-        android:id="@+id/thingEditContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/thingContent"
-        android:layout_alignBottom="@+id/thingContent"
-        android:layout_toRightOf="@+id/thingContent"
-        android:ems="10"
-        android:inputType="textMultiLine" />
-
     <TextView
         android:id="@+id/thingTime"
         android:layout_width="wrap_content"
@@ -49,15 +21,41 @@
         android:layout_centerHorizontal="true"
         android:ems="10" />
 
-    <TextView
-        android:id="@+id/thingContent"
+    <Button
+        android:id="@+id/post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Post" />
+
+    <Button
+        android:id="@+id/chooseThingPic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/chooseDate"
-        android:layout_marginTop="51dp"
-        android:text="Content"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="picture" />
+
+    <ImageView
+        android:id="@+id/imageAttachThing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/chooseThingPic"
+        android:layout_alignParentLeft="true"
+        android:src="@android:drawable/screen_background_light_transparent" />
+
+    <EditText
+        android:id="@+id/thingEditContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thingContent"
+        android:layout_toRightOf="@+id/chooseThingPic"
+        android:ems="10"
+        android:inputType="textMultiLine" >
+
+        <requestFocus />
+    </EditText>
 
     <DatePicker
         android:id="@+id/chooseDate"
@@ -65,7 +63,25 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/thingEditTitle"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
         android:calendarViewShown="false" />
+
+    <TextView
+        android:id="@+id/thingTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/thingTime"
+        android:layout_alignParentLeft="true"
+        android:text="Title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/thingContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/chooseDate"
+        android:layout_marginTop="19dp"
+        android:text="Content"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

@@ -12,10 +12,7 @@ import com.speed.kinship.model.Thing;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,7 +41,7 @@ public class ThingActivity extends Activity {
 	private ImageButton setting;
 	
 	private SimpleAdapter myAdapter;
-	private ArrayList<HashMap<String, String>>  mylist;
+	private ArrayList<HashMap<String, Object>>  mylist;
 	private ArrayList<Thing> thiList=new ArrayList<Thing>();
 	private Date lastdate;
 	private int id;
@@ -55,7 +52,7 @@ public class ThingActivity extends Activity {
 	private boolean refreshable;
 	private GestureDetector myGesture;
 	
-	MyBroadcast broadcastReceiver=null;
+	public static final String ACTION_INTENT = "DELETE_POSITION";
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -70,6 +67,7 @@ public class ThingActivity extends Activity {
 		memory=(Button) findViewById(R.id.memory);
 		writeThing=(ImageButton) findViewById(R.id.writeThing);
 		setting=(ImageButton) findViewById(R.id.setting);
+		
 		//user information
 		Intent intent=getIntent();
 		id=Integer.parseInt(intent.getStringExtra("id"));
@@ -95,6 +93,7 @@ public class ThingActivity extends Activity {
 				intent.putExtra("userName",ThingActivity.this.userName);
 				
 				startActivity(intent);
+				
 			}
 			
 		});
@@ -107,13 +106,26 @@ public class ThingActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				HashMap<String,String> map=(HashMap<String, String>) parent.getItemAtPosition(position);
+				HashMap<String,Object> map=(HashMap<String,Object>) parent.getItemAtPosition(position);
 				Intent intent=new Intent();
-				intent.putExtra("title", map.get("title"));
-				intent.putExtra("time", map.get("time"));
-				intent.putExtra("content", map.get("content"));
-				intent.putExtra("thingId", map.get("thingId"));
-				intent.putExtra("userId", map.get("userId"));
+				intent.putExtra("title", map.get("title").toString());
+				intent.putExtra("time", map.get("time").toString());
+				intent.putExtra("content", map.get("content").toString());
+				if(map.get("pic")!=null) {
+					intent.putExtra("pic", (byte[])map.get("pic"));
+					byte[] a=(byte[])map.get("pic");
+					String str="";
+					for(int i=0;i<a.length;i++) {
+						str=str+a[i];
+					}
+					System.out.println("the byte array sent out"+str);
+				} else {
+					intent.putExtra("pic", "");
+				}
+				
+				
+				intent.putExtra("thingId", map.get("thingId").toString());
+				intent.putExtra("userId", map.get("userId").toString());
 				intent.putExtra("position", String.valueOf(position));
 				
 				intent.putExtra("id", String.valueOf(ThingActivity.this.id));
@@ -122,7 +134,8 @@ public class ThingActivity extends Activity {
 				
 				//Toast.makeText(getApplicationContext(), map.toString(), Toast.LENGTH_SHORT).show();
 				intent.setClass(ThingActivity.this, ThingContentActivity.class);
-				startActivity(intent);
+				
+				startActivityForResult(intent, 1);
 			}
 			
 			
@@ -324,21 +337,7 @@ public class ThingActivity extends Activity {
 	public boolean getRefreshable(){
 		return refreshable;
 	}
-	
-	private class MyBroadcast extends BroadcastReceiver {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			// TODO Auto-generated method stub
-			int delete=Integer.parseInt(intent.getStringExtra("position"));
-			mylist.remove(delete);
-			myAdapter.notifyDataSetChanged();
-		}
 		
-	}
-	
-	
-	
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
@@ -351,9 +350,7 @@ public class ThingActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		broadcastReceiver=new MyBroadcast();
-		IntentFilter filter = new IntentFilter("DELETE_POSITION");
-		registerReceiver(broadcastReceiver, filter);
+
 		
 	}
 	
@@ -373,9 +370,20 @@ public class ThingActivity extends Activity {
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		unregisterReceiver( broadcastReceiver);
 	}
 	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		if(resultCode==Activity.RESULT_OK) {
+			int delete=Integer.parseInt(data.getStringExtra("position"));
+			Log.i("onActivityResult","delete"+delete);
+			mylist.remove(delete);
+			myAdapter.notifyDataSetChanged();
+		}
+		
+	}
+
 	@SuppressLint("SimpleDateFormat") 
 	private class getNextNThingAsyncTask extends AsyncTask<Void,Void,List<Thing>> {
 		private int id;
@@ -410,19 +418,26 @@ public class ThingActivity extends Activity {
 			thiList.addAll(result);
 			//mylist = new ArrayList<HashMap<String, String>>();
 			for(int i=0;i<thiList.size();i++) {
+				
 				Thing temp=thiList.get(i);
-				HashMap<String, String> hm=new HashMap<String,String>();
+				HashMap<String, Object> hm=new HashMap<String,Object>();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				String str=sdf.format(temp.getTime());
 				hm.put("time", str);
 				hm.put("title", temp.getTitle());
 				hm.put("content",temp.getContent());
+				if(temp.getPic()!=null) {
+					hm.put("pic", temp.getPic());
+				} else {
+					hm.put("pic", null);
+				}
 				hm.put("thingId",String.valueOf(temp.getId()));
 				hm.put("userId", String.valueOf(temp.getCreator().getId()));
 				mylist.add(hm);
 				if(i==thiList.size()-1) {
 					ThingActivity.this.lastdate=temp.getTime();
 				}
+				
 			}
 			myAdapter.notifyDataSetChanged();
 //			myAdapter=new SimpleAdapter(ThingActivity.this,mylist,R.layout.timelineitem,
@@ -460,21 +475,27 @@ public class ThingActivity extends Activity {
 			// TODO Auto-generated method stub
 			//ArrayList<Thing> thiList=new ArrayList<Thing>();
 			thiList.addAll(result);
-			mylist = new ArrayList<HashMap<String, String>>();
+			mylist = new ArrayList<HashMap<String, Object>>();
 			for(int i=0;i<thiList.size();i++) {
 				Thing temp=thiList.get(i);
-				HashMap<String, String> hm=new HashMap<String,String>();
+				HashMap<String, Object> hm=new HashMap<String,Object>();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				String str=sdf.format(temp.getTime());
 				hm.put("time", str);
 				hm.put("title", temp.getTitle());
 				hm.put("content",temp.getContent());
+				if(temp.getPic()!=null) {
+					hm.put("pic", temp.getPic());
+				} else {
+					hm.put("pic", null);
+				}
 				hm.put("thingId",String.valueOf(temp.getId()));
 				hm.put("userId", String.valueOf(temp.getCreator().getId()));
 				mylist.add(hm);
 				if(i==thiList.size()-1) {
 					ThingActivity.this.lastdate=temp.getTime();
 				}
+				
 			}
 			myAdapter=new SimpleAdapter(ThingActivity.this,mylist,R.layout.timelineitem,
 					new String[]{"time","title"},

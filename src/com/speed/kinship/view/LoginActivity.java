@@ -109,13 +109,22 @@ public class LoginActivity extends Activity {
 			UserHandler userHandler = new UserHandlerImpl();
 			if(identity==1) {
 				User user=userHandler.login(username, password, Identity.PARENT);
-				id=user.getId();
-				return user;
+				if(user!=null) {
+					id=user.getId();
+					return user;
+				} else {
+					return user;
+				}
+				
 			}
 			else if(identity==0) {
 				User user=userHandler.login(username, password, Identity.CHILD);
-				id=user.getId();
-				return user;
+				if(user!=null) {
+					id=user.getId();
+					return user;
+				} else {
+					return user;
+				}
 			} else {
 				return null;
 			}
@@ -134,7 +143,7 @@ public class LoginActivity extends Activity {
 				startActivity(intent);
 				Log.i("Login", "Succeed!"+result.getId());
 			} else {
-				Toast.makeText(LoginActivity.this, "ERROR", Toast.LENGTH_LONG).show();
+				Toast.makeText(LoginActivity.this, "Wrong username or password! Please try again!", Toast.LENGTH_LONG).show();
 				Log.i("Login", "Fail!");
 			}
 		}
