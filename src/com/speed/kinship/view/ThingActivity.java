@@ -501,7 +501,7 @@ public class ThingActivity extends Activity {
 				}
 			}
 			myAdapter.notifyDataSetChanged();
-			thingList.removeHeaderView(listFooter);//Ìí¼Ófooter£¬header
+			thingList.removeHeaderView(listFooter);//remove header
 		}
 		
 	}

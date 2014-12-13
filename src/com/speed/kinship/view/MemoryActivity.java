@@ -44,6 +44,8 @@ public class MemoryActivity extends Activity {
 	private String identity;
 	private String userName;
 	
+	private View listFooter;
+	
 	//for gestureDetector
 	private boolean refreshable;
 	private GestureDetector myGesture;
@@ -64,6 +66,13 @@ public class MemoryActivity extends Activity {
 		id=Integer.parseInt(intent.getStringExtra("id"));
 		identity=intent.getStringExtra("identity");
 		userName=intent.getStringExtra("userName");
+		
+		myList=new ArrayList<HashMap<String,String>>();
+		mAdapter = new myAdapter(MemoryActivity.this);
+		LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+		listFooter = layoutInflater.inflate(R.layout.loadingfooter, null);
+		memoryList.addHeaderView(listFooter);
+		memoryList.setAdapter(mAdapter);
 		
 		getMemoryAsyncTask getMemory=new getMemoryAsyncTask();
 		getMemory.execute( );
@@ -117,12 +126,9 @@ public class MemoryActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent=new Intent();
-				intent.setClass(MemoryActivity.this, MemoryActivity.class);
-				intent.putExtra("id", String.valueOf(id));
-				intent.putExtra("identity", identity);
-				intent.putExtra("userName",userName);
-				startActivity(intent);
+				myList=new ArrayList<HashMap<String,String>>();
+				getMemoryAsyncTask getMemory=new getMemoryAsyncTask();
+        		getMemory.execute( );
 			}
 			
 			
@@ -195,13 +201,9 @@ public class MemoryActivity extends Activity {
 				            } 
 				            else if ((e1.getY() - e2.getY() <-400) && getRefreshable()){    
 					              
-				            	Intent intent=new Intent();
-								intent.setClass(MemoryActivity.this, MemoryActivity.class);
-								intent.putExtra("id", String.valueOf(id));
-								intent.putExtra("identity", identity);
-								intent.putExtra("userName",userName);
-								startActivity(intent);
-								MemoryActivity.this.finish();
+				            	myList=new ArrayList<HashMap<String,String>>();
+				            	getMemoryAsyncTask getMemory=new getMemoryAsyncTask();
+				        		getMemory.execute( );
 				                
 				                return true;    
 				            } 
@@ -249,6 +251,12 @@ public class MemoryActivity extends Activity {
 			
 			// TODO Auto-generated constructor stub
 		}
+		
+		@Override
+		protected void onPreExecute(){
+			memoryList.addHeaderView(listFooter);//Ìí¼Ófooter£¬header
+			mAdapter.notifyDataSetChanged();
+		}
 
 		@Override
 		protected List<Memory> doInBackground(Void... params) {
@@ -260,7 +268,7 @@ public class MemoryActivity extends Activity {
 		@Override
 		protected void onPostExecute(List<Memory> result) {
 			// TODO Auto-generated method stub
-			myList=new ArrayList<HashMap<String,String>>();
+			
 			for(Memory temp:result) {
 				HashMap<String, String> hm=new HashMap<String,String>();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -271,8 +279,8 @@ public class MemoryActivity extends Activity {
 				hm.put("time", str);
 				myList.add(hm);
 			}
-			mAdapter = new myAdapter(MemoryActivity.this);
-			memoryList.setAdapter(mAdapter);
+			mAdapter.notifyDataSetChanged();
+			memoryList.removeHeaderView(listFooter);//remove header
 			System.out.println("data!!!");
 		}
 		
