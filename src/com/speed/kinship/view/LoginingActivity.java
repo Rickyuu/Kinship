@@ -166,21 +166,48 @@ public class LoginingActivity extends Activity {
     					DadflagOpposite=false;
     				}
                 }
-                if((Momflag==false)&&(Dadflag==false)&&(DadflagOpposite==false)&&(MomflagOpposite==false)) {
-                	if(tempMom.compareTo(tempMomOpposite)>0) {
-                		lastMum=tempMom;
-                	} else {
-                		lastMum=tempMomOpposite;
-                	}
-                	if(tempDad.compareTo(tempDadOpposite)>0) {
-                		lastDad=tempDad;
-                	} else {
-                		lastDad=tempDadOpposite;
-                	}
-                	welcome.setText("The date of the last contact is\nwith mum: "+lastMum+"\nwith dad: "+lastDad);
-        			welcome.setGravity(Gravity.CENTER);
-                	break;
+                if((phoneDad!="")&&(phoneMum!="")) {
+                	if((Momflag==false)&&(Dadflag==false)&&(DadflagOpposite==false)&&(MomflagOpposite==false)) {
+                    	if(tempMom.compareTo(tempMomOpposite)>0) {
+                    		lastMum=tempMom;
+                    	} else {
+                    		lastMum=tempMomOpposite;
+                    	}
+                    	if(tempDad.compareTo(tempDadOpposite)>0) {
+                    		lastDad=tempDad;
+                    	} else {
+                    		lastDad=tempDadOpposite;
+                    	}
+                    	welcome.setText("The date of the last contact is\nwith mum: "+lastMum+"\nwith dad: "+lastDad);
+            			welcome.setGravity(Gravity.CENTER);
+                    	break;
+                    }
                 }
+                if((phoneDad=="")&&(phoneMum!="")) {
+                	if((Momflag==false)&&(MomflagOpposite==false)) {
+                		if(tempMom.compareTo(tempMomOpposite)>0) {
+                    		lastMum=tempMom;
+                    	} else {
+                    		lastMum=tempMomOpposite;
+                    	}
+                		welcome.setText("The date of the last comtact with Mum is:" +lastMum);
+                		break;
+                	}
+                	
+                }
+                if((phoneDad!="")&&(phoneMum=="")) {
+                	if((Dadflag==false)&&(DadflagOpposite==false)) {
+                		if(tempDad.compareTo(tempDadOpposite)>0) {
+                    		lastDad=tempDad;
+                    	} else {
+                    		lastDad=tempDadOpposite;
+                    	}
+                		welcome.setText("The date of the last comtact with Dad is:" +lastDad);
+                		break;
+                	}
+                }
+                
+                
                 
 			}
 		}
