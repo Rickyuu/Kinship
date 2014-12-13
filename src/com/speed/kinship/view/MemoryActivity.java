@@ -61,6 +61,7 @@ public class MemoryActivity extends Activity {
 		timeLine=(Button) findViewById(R.id.timeLine3);
 		state=(Button) findViewById(R.id.state3);
 		memory=(Button) findViewById(R.id.memory3);
+		memory.setTextColor(0xff0099ff);
 		
 		Intent intent=getIntent();
 		id=Integer.parseInt(intent.getStringExtra("id"));

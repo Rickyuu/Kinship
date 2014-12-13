@@ -65,6 +65,7 @@ public class ThingActivity extends Activity {
 		
 		thingList=(ListView) findViewById(R.id.thingList);
 		timeLine=(Button) findViewById(R.id.timeLine);
+		timeLine.setTextColor(0xff0099ff);
 		state=(Button) findViewById(R.id.state);
 		memory=(Button) findViewById(R.id.memory);
 		writeThing=(ImageButton) findViewById(R.id.writeThing);

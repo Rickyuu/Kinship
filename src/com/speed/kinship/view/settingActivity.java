@@ -44,6 +44,13 @@ public class settingActivity extends Activity {
         id = b.getString("id");
         identity = b.getString("identity");
         
+        if(identity.equals("PARENT")){
+        	numberMom.setVisibility(View.GONE);
+        	numberDad.setVisibility(View.GONE);
+        }else{
+        	numberChi.setVisibility(View.GONE);
+        }
+        
         confirm.setOnClickListener(new OnClickListener(){
         	
 			@Override
