@@ -123,12 +123,6 @@ public class ThingActivity extends Activity {
 				intent.putExtra("content", map.get("content").toString());
 				if(map.get("pic")!=null) {
 					intent.putExtra("pic", (byte[])map.get("pic"));
-					byte[] a=(byte[])map.get("pic");
-					String str="";
-					for(int i=0;i<a.length;i++) {
-						str=str+a[i];
-					}
-					System.out.println("the byte array sent out"+str);
 				} else {
 					intent.putExtra("pic", "");
 				}

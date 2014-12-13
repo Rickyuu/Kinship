@@ -126,9 +126,8 @@ public class MemoryActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				myList=new ArrayList<HashMap<String,String>>();
-				getMemoryAsyncTask getMemory=new getMemoryAsyncTask();
-        		getMemory.execute( );
+				refreshMemoryAsyncTask refreshMemory=new refreshMemoryAsyncTask();
+        		refreshMemory.execute( );
 			}
 			
 			
@@ -201,9 +200,9 @@ public class MemoryActivity extends Activity {
 				            } 
 				            else if ((e1.getY() - e2.getY() <-400) && getRefreshable()){    
 					              
-				            	myList=new ArrayList<HashMap<String,String>>();
-				            	getMemoryAsyncTask getMemory=new getMemoryAsyncTask();
-				        		getMemory.execute( );
+				            	
+				            	refreshMemoryAsyncTask refreshMemory=new refreshMemoryAsyncTask();
+				        		refreshMemory.execute( );
 				                
 				                return true;    
 				            } 
@@ -285,6 +284,49 @@ public class MemoryActivity extends Activity {
 		}
 		
 	}
+	
+private class refreshMemoryAsyncTask extends AsyncTask<Void,Void,List<Memory>> {
+		
+
+		public refreshMemoryAsyncTask() {
+			
+			// TODO Auto-generated constructor stub
+		}
+		
+		@Override
+		protected void onPreExecute(){
+			memoryList.addHeaderView(listFooter);//Ìí¼Ófooter£¬header
+			mAdapter.notifyDataSetChanged();
+		}
+
+		@Override
+		protected List<Memory> doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			MemoryHandler memoryHandler=new MemoryHandlerImpl();
+			return memoryHandler.getAllMemories(MemoryActivity.this.userName);
+		}
+
+		@Override
+		protected void onPostExecute(List<Memory> result) {
+			// TODO Auto-generated method stub
+			myList=new ArrayList<HashMap<String,String>>();
+			for(Memory temp:result) {
+				HashMap<String, String> hm=new HashMap<String,String>();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String str=sdf.format(temp.getTime());
+				hm.put("content", temp.getContent());
+				hm.put("id", String.valueOf(temp.getId()));
+				hm.put("username", temp.getCreator().getUserName());
+				hm.put("time", str);
+				myList.add(hm);
+			}
+			mAdapter.notifyDataSetChanged();
+			memoryList.removeHeaderView(listFooter);//remove header
+			System.out.println("data!!!");
+		}
+		
+	}
+	
 	public final class ViewHolder{
 		public TextView Time;
 		public TextView Content;
