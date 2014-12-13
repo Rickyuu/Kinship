@@ -39,4 +39,12 @@
         android:layout_alignParentRight="true"
         android:text="delete" />
 
+    <ImageView
+        android:id="@+id/thingImageShow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/delete"
+        android:layout_alignParentLeft="true"
+        android:src="@android:drawable/screen_background_dark_transparent" />
+
 </RelativeLayout>

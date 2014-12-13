@@ -62,6 +62,7 @@
         <activity
             android:name=".ThingActivity"
             android:label="@string/app_name">
+            
            
         </activity>
         <activity 

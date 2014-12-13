@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.speed.kinship.controller.UserHandler;
 import com.speed.kinship.controller.impl.UserHandlerImpl;
@@ -38,9 +39,7 @@ public class RegisterActivity extends Activity {
 				password=newPassword.getText().toString();
 				RegisterAsyncTask asynctask=new RegisterAsyncTask(account,password,Identity.PARENT);
 				asynctask.execute( );		
-				Intent intent=new Intent();
-				intent.setClass(RegisterActivity.this, LoginActivity.class);
-				startActivity(intent);
+				
 			}
 			
 		});
@@ -70,7 +69,11 @@ public class RegisterActivity extends Activity {
 			// TODO Auto-generated method stub
 			if(result!=null) {
 				Log.i("Register", "Success!");
+				Intent intent=new Intent();
+				intent.setClass(RegisterActivity.this, LoginActivity.class);
+				startActivity(intent);
 			} else {
+				Toast.makeText(RegisterActivity.this, "The username has already exist!", Toast.LENGTH_LONG).show();
 				Log.i("Register", "Fail!");
 			}
 		}
