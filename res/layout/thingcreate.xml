@@ -37,14 +37,6 @@
         android:layout_alignParentLeft="true"
         android:text="picture" />
 
-    <ImageView
-        android:id="@+id/imageAttachThing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/chooseThingPic"
-        android:layout_alignParentLeft="true"
-        android:src="@android:drawable/screen_background_light_transparent" />
-
     <EditText
         android:id="@+id/thingEditContent"
         android:layout_width="wrap_content"
@@ -83,5 +75,14 @@
         android:layout_marginTop="19dp"
         android:text="Content"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ImageView
+        android:id="@+id/imageAttachThing"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignLeft="@+id/thingEditTitle"
+        android:layout_below="@+id/thingEditContent"
+        android:layout_marginTop="70dp"
+        android:src="@android:drawable/screen_background_light_transparent" />
 
 </RelativeLayout>

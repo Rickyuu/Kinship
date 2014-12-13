@@ -85,13 +85,17 @@ public class LoginingActivity extends Activity {
 		final Cursor cr=resolver.query(CallLog.Calls.CONTENT_URI, projection, null, null, null);
 		numIndex=cr.getColumnIndex(CallLog.Calls.NUMBER);
 		dateIndex=cr.getColumnIndex(CallLog.Calls.DATE);
+		boolean Momflag=true;
+		boolean Dadflag=true;
 		if(identity.equals("PARENT")) {
-			for(int i=cr.getCount()-1;i>-1;i--) {
+			for(int i=0;i<cr.getCount();i++) {
 				cr.moveToPosition(i);
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				date = new Date(Long.parseLong(cr.getString(dateIndex)));
 				String time = sdf.format(date);
 				num=cr.getString(numIndex);
+				System.out.println(time+" ");
+				
 				if(num.equals(phoneNum)) {
 					lastChild=time;
 					break;
@@ -100,27 +104,29 @@ public class LoginingActivity extends Activity {
 			welcome.setText("The date of the last contact is "+lastChild);
 		}
 		if(identity.equals("CHILD")) {
-			for(int i=cr.getCount()-1;i>-1;i--) {
+			for(int i=0;i<cr.getCount();i++) {
 				cr.moveToPosition(i);
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				date = new Date(Long.parseLong(cr.getString(dateIndex)));
 				String time = sdf.format(date);
 				num=cr.getString(numIndex);
-				if((num.equals(phoneMum))) {
-					lastMum=time;
-					break;
+                if(Momflag) {
+                	if((num.equals(phoneMum))) {
+    					lastMum=time;
+    					Momflag=false;
+    				}
 				}
-			}
-			for(int i=cr.getCount()-1;i>-1;i--) {
-				cr.moveToPosition(i);
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				date = new Date(Long.parseLong(cr.getString(dateIndex)));
-				String time = sdf.format(date);
-				num=cr.getString(numIndex);
-				if((num.equals(phoneDad))) {
-					lastMum=time;
-					break;
-				}
+                if(Dadflag) {
+                	if((num.equals(phoneDad))) {
+    					lastMum=time;
+    					Dadflag=false;
+    				}
+                }
+                if((Momflag==false)&&(Dadflag==false)) {
+                	break;
+                }
+                
+				
 			}
 			welcome.setText("The date of the last contact with Mum is"+lastMum+"The date of the last contact with Dad is"+lastDad);
 			
