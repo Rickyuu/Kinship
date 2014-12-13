@@ -66,6 +66,7 @@ public class StateActivity extends Activity{
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
+		Log.e("errorTag","already");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.state);
         //绑定XML中的ListView，作为Item的容器

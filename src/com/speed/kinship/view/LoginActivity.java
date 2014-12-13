@@ -50,11 +50,9 @@ public class LoginActivity extends Activity {
 				// TODO Auto-generated method stub
 				if(checkedId==parent.getId()) {
 					LoginActivity.this.identity=1;
-					Toast.makeText(LoginActivity.this, "identity:parent"+identity, Toast.LENGTH_LONG).show();
 				}
 				if(checkedId==child.getId()) {
 					LoginActivity.this.identity=0;
-					Toast.makeText(LoginActivity.this, "identity:child"+identity, Toast.LENGTH_LONG).show();
 				}
 				
 			}
