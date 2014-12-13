@@ -54,7 +54,7 @@ public class FeedbackCreate extends Activity {
 					FeedbackCreateAsyncTask postState = new FeedbackCreateAsyncTask(username, id, identity, context);
 					postState.execute();
 					Bundle data = new Bundle();
-	        		data.putString("username",username);
+	        		data.putString("userName",username);
 	        		data.putString("id", id);
 	        		data.putString("identity", identity);
 	        		Intent intent = new Intent(FeedbackCreate.this, StateActivity.class);

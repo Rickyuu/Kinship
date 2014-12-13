@@ -15,22 +15,12 @@
 
     <Button
         android:id="@+id/register"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/login"
         android:layout_alignRight="@+id/password"
         android:layout_marginRight="15dp"
         android:text="Register" />
-
-    <Button
-        android:id="@+id/login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/password"
-        android:layout_below="@+id/Identity"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="85dp"
-        android:text="Login" />
 
     <RadioGroup
         android:id="@+id/Identity"
@@ -84,5 +74,15 @@
 
         <requestFocus />
     </EditText>
+
+    <Button
+        android:id="@+id/login"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Identity"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="36dp"
+        android:layout_toLeftOf="@+id/register"
+        android:text="Login" />
 
 </RelativeLayout>

@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -77,6 +78,7 @@ public class StateActivity extends Activity{
         create = (ImageButton) findViewById(R.id.imageButton1);
         timeline = (Button) findViewById(R.id.button2);
         status = (Button) findViewById(R.id.create);
+        status.setTextColor(0xff0099ff);
         memory = (Button) findViewById(R.id.button3);
         
         Intent intent = getIntent();
@@ -585,7 +587,7 @@ public class StateActivity extends Activity{
 	                //跳转到回复页面
 	            	Log.e("ClickState", "ClickComment");
 	            	Bundle data = new Bundle();
-	        		data.putString("username",username);
+	        		data.putString("userName",username);
 	        		data.putString("id", id);
 	        		data.putString("stateId", stateid);
 	        		data.putString("identity", identity);
