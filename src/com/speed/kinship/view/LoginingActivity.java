@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CallLog;
+import android.view.Gravity;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -97,7 +98,7 @@ public class LoginingActivity extends Activity {
 					break;
 				}
 			}
-			welcome.setText("The date of the last contact is "+lastChild);
+			welcome.setText("The date of the last contact is\n"+lastChild);
 		}
 		if(identity.equals("CHILD")) {
 			for(int i=cr.getCount()-1;i>-1;i--) {
@@ -122,7 +123,8 @@ public class LoginingActivity extends Activity {
 					break;
 				}
 			}
-			welcome.setText("The date of the last contact with Mum is"+lastMum+"The date of the last contact with Dad is"+lastDad);
+			welcome.setText("The date of the last contact is\nwith mum: "+lastMum+"\nwith dad: "+lastDad);
+			welcome.setGravity(Gravity.CENTER);
 			
 		}
 		

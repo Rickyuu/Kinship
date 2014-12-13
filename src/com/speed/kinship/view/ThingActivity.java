@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.GestureDetector.OnGestureListener;
@@ -39,6 +40,7 @@ public class ThingActivity extends Activity {
 	private Button memory;
 	private ImageButton writeThing;
 	private ImageButton setting;
+	private View listFooter;
 	
 	private SimpleAdapter myAdapter;
 	private ArrayList<HashMap<String, Object>>  mylist;
@@ -73,10 +75,18 @@ public class ThingActivity extends Activity {
 		id=Integer.parseInt(intent.getStringExtra("id"));
 		identity=intent.getStringExtra("identity");
 		userName=intent.getStringExtra("userName");
+		LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+		listFooter = layoutInflater.inflate(R.layout.loadingfooter, null);
+		mylist = new ArrayList<HashMap<String, Object>>();
+		myAdapter=new SimpleAdapter(ThingActivity.this,mylist,R.layout.timelineitem,
+				new String[]{"time","title"},
+				new int[]{R.id.timeLineTime,R.id.timeLineTitle});
+		thingList.addHeaderView(listFooter);
+		thingList.setAdapter(myAdapter);
 		
 		
 		
-		getThingAsyncTask getThing=new getThingAsyncTask(ThingActivity.this.id,ThingActivity.this.identity,ThingActivity.this.userName);
+		getThingAsyncTask getThing=new getThingAsyncTask(10,ThingActivity.this.identity,ThingActivity.this.userName);
 		getThing.execute( );
 		
 		
@@ -148,7 +158,7 @@ public class ThingActivity extends Activity {
 				// TODO Auto-generated method stub
 				if(isBottom&& scrollState==OnScrollListener.SCROLL_STATE_IDLE) {
 					int pos=thingList.getLastVisiblePosition();
-					getNextNThingAsyncTask nextN=new getNextNThingAsyncTask(ThingActivity.this.id,ThingActivity.this.identity,ThingActivity.this.userName);
+					getNextNThingAsyncTask nextN=new getNextNThingAsyncTask(5,ThingActivity.this.identity,ThingActivity.this.userName);
 					nextN.execute();
 					
 					isBottom=false;
@@ -177,7 +187,7 @@ public class ThingActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				thiList=new ArrayList<Thing>();
-				getThingAsyncTask getthing=new getThingAsyncTask(ThingActivity.this.id,ThingActivity.this.identity,ThingActivity.this.userName);
+				getThingAsyncTask getthing=new getThingAsyncTask(10,ThingActivity.this.identity,ThingActivity.this.userName);
 				getthing.execute( );
 			}
 			
@@ -276,8 +286,9 @@ public class ThingActivity extends Activity {
 						intent.putExtra("id", String.valueOf(id));
 						intent.putExtra("identity", identity);
 						intent.putExtra("userName",userName);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(intent);
-						ThingActivity.this.finish();
+//						ThingActivity.this.finish();
 		                
 		                return true;    
 		            }   
@@ -289,15 +300,16 @@ public class ThingActivity extends Activity {
 						intent.putExtra("id", String.valueOf(id));
 						intent.putExtra("identity", identity);
 						intent.putExtra("userName",userName);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(intent);
-						ThingActivity.this.finish();
+						//ThingActivity.this.finish();
 		                
 		                return true;    
 		            } 
 		            else if ((e1.getY() - e2.getY() <-400) && getRefreshable()){    
 			              
 		            	thiList=new ArrayList<Thing>();
-						getThingAsyncTask getthing=new getThingAsyncTask(ThingActivity.this.id,ThingActivity.this.identity,ThingActivity.this.userName);
+						getThingAsyncTask getthing=new getThingAsyncTask(10, ThingActivity.this.identity,ThingActivity.this.userName);
 						getthing.execute( );
 		                
 		                return true;    
@@ -337,7 +349,7 @@ public class ThingActivity extends Activity {
 	public boolean getRefreshable(){
 		return refreshable;
 	}
-		
+
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
@@ -350,7 +362,6 @@ public class ThingActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-
 		
 	}
 	
@@ -386,14 +397,14 @@ public class ThingActivity extends Activity {
 
 	@SuppressLint("SimpleDateFormat") 
 	private class getNextNThingAsyncTask extends AsyncTask<Void,Void,List<Thing>> {
-		private int id;
+		private int num;
 		@SuppressWarnings("unused")
 		private String identity;
 		private String userName;
 		
 
-		public getNextNThingAsyncTask(int id, String identity, String userName) {
-			this.id = id;
+		public getNextNThingAsyncTask(int num, String identity, String userName) {
+			this.num = num;
 			this.identity = identity;
 			this.userName = userName;
 		}
@@ -451,22 +462,27 @@ public class ThingActivity extends Activity {
 	
 	@SuppressLint("SimpleDateFormat") 
 	private class getThingAsyncTask extends AsyncTask<Void, Void, List<Thing>> {
-		private int id;
+		private int num;
 		@SuppressWarnings("unused")
 		private String identity;
 		private String userName;
 		
-		public getThingAsyncTask(int id, String identity, String userName) {
-			this.id = id;
+		public getThingAsyncTask(int num, String identity, String userName) {
+			this.num = num;
 			this.identity = identity;
 			this.userName = userName;
+		}
+		
+		protected void onPreExecute(){
+			thingList.addHeaderView(listFooter);//Ìí¼Ófooter£¬header
+			myAdapter.notifyDataSetChanged();
 		}
 
 		@Override
 		protected List<Thing> doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			ThingHandler thingHandler=new ThingHandlerImpl();
-			return thingHandler.getFirstNThings(userName, id);
+			return thingHandler.getFirstNThings(userName, num);
 		}
 
 		@Override
@@ -475,7 +491,9 @@ public class ThingActivity extends Activity {
 			// TODO Auto-generated method stub
 			//ArrayList<Thing> thiList=new ArrayList<Thing>();
 			thiList.addAll(result);
+
 			mylist = new ArrayList<HashMap<String, Object>>();
+
 			for(int i=0;i<thiList.size();i++) {
 				Thing temp=thiList.get(i);
 				HashMap<String, Object> hm=new HashMap<String,Object>();
@@ -497,10 +515,8 @@ public class ThingActivity extends Activity {
 				}
 				
 			}
-			myAdapter=new SimpleAdapter(ThingActivity.this,mylist,R.layout.timelineitem,
-					new String[]{"time","title"},
-					new int[]{R.id.timeLineTime,R.id.timeLineTitle});
-			thingList.setAdapter(myAdapter);
+			myAdapter.notifyDataSetChanged();
+			thingList.removeHeaderView(listFooter);//Ìí¼Ófooter£¬header
 		}
 		
 	}
