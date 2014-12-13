@@ -52,6 +52,7 @@ public class ThingCreateActivity extends Activity {
 		chooseDate=(DatePicker) findViewById(R.id.chooseDate);
 		thingPictureChoose=(Button) findViewById(R.id.chooseThingPic);
 		imageAttach=(ImageView) findViewById(R.id.imageAttachThing);
+		imageAttach.setVisibility(View.INVISIBLE);
 		Intent intent=getIntent();
 		id=Integer.parseInt(intent.getStringExtra("id"));
 		identity=intent.getStringExtra("identity");
@@ -130,9 +131,14 @@ public class ThingCreateActivity extends Activity {
 	        // 解码像素的模式，在该模式下可以直接按照option的配置取出像素点
 	        options.inJustDecodeBounds = false; 
 	        imageBitmap = BitmapFactory.decodeFile(imaUrl, options);
-			imageAttach.setVisibility(View.VISIBLE);
-			imageAttach.setImageBitmap(imageBitmap);
-			imageAttach.postInvalidate();
+	        if(imageBitmap!=null) {
+	        	imageAttach.setVisibility(View.VISIBLE);
+				imageAttach.setImageBitmap(imageBitmap);
+				imageAttach.postInvalidate();
+	        } else {
+	        	imageAttach.setVisibility(View.INVISIBLE);
+	        }
+			
 
 		}
 		
@@ -181,12 +187,13 @@ public class ThingCreateActivity extends Activity {
 			// TODO Auto-generated method stub
 			if(result!=null) {
 				Log.i("Post", "Success!");
-				Intent intent=new Intent();
-				intent.setClass(ThingCreateActivity.this, ThingActivity.class);
-				intent.putExtra("id", String.valueOf(id));
-				intent.putExtra("identity", identity);
-				intent.putExtra("userName",userName);
-				startActivity(intent);
+//				Intent intent=new Intent();
+//				intent.setClass(ThingCreateActivity.this, ThingActivity.class);
+//				intent.putExtra("id", String.valueOf(id));
+//				intent.putExtra("identity", identity);
+//				intent.putExtra("userName",userName);
+//				startActivity(intent);
+				ThingCreateActivity.this.finish();
 				
 			} else {
 				Log.i("Post","Fail!");

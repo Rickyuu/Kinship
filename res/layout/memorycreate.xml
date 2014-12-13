@@ -3,43 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <DatePicker
-        android:id="@+id/memoryEditDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/memoryEditTitle"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="48dp"
-        android:calendarViewShown="false" />
-
-    <TextView
-        android:id="@+id/memoryTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="46dp"
-        android:text="Title"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <EditText
-        android:id="@+id/memoryEditTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/memoryTitle"
-        android:layout_centerHorizontal="true"
-        android:ems="10" />
-
-    <TextView
-        android:id="@+id/memoryTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/memoryEditDate"
-        android:layout_marginTop="46dp"
-        android:text="Date"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
     <Button
         android:id="@+id/memoryPost"
         android:layout_width="wrap_content"
@@ -49,5 +12,27 @@
         android:layout_marginRight="32dp"
         android:layout_marginTop="86dp"
         android:text="Post" />
+
+    <EditText
+        android:id="@+id/memoryEditTitle"
+        android:hint="Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <DatePicker
+        android:id="@+id/memoryEditDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/memoryEditTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp"
+        android:calendarViewShown="false" />
 
 </RelativeLayout>

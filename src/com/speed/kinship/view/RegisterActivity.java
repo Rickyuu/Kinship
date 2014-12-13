@@ -54,6 +54,7 @@ public class RegisterActivity extends Activity {
 				asynctask.execute( );
 				LoginAsyncTask loginAsyncTask=new LoginAsyncTask(account,password,identity);
 				loginAsyncTask.execute( );
+				
 			}
 			
 		});
@@ -95,11 +96,9 @@ public class RegisterActivity extends Activity {
 			// TODO Auto-generated method stub
 			if(result!=null) {
 				Log.i("Register", "Success!");
-				Intent intent=new Intent();
-				intent.setClass(RegisterActivity.this, LoginActivity.class);
-				startActivity(intent);
+				
 			} else {
-				Toast.makeText(RegisterActivity.this, "The username has already exist!", Toast.LENGTH_LONG).show();
+				Toast.makeText(RegisterActivity.this, "The username has already exist!", Toast.LENGTH_SHORT).show();
 				Log.i("Register", "Fail!");
 			}
 		}
@@ -149,6 +148,7 @@ public class RegisterActivity extends Activity {
 				intent.setClass(RegisterActivity.this, LoginingActivity.class);
 				startActivity(intent);
 				Log.i("Login", "Succeed!"+result.getId());
+				
 			} else {
 				Toast.makeText(RegisterActivity.this, "ERROR", Toast.LENGTH_LONG).show();
 				Log.i("Login", "Fail!");

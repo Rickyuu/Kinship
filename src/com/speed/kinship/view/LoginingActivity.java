@@ -198,6 +198,7 @@ public class LoginingActivity extends Activity {
 				intent.putExtra("identity", LoginingActivity.this.identity);
 				intent.putExtra("userName",LoginingActivity.this.userName);
 				startActivity(intent);
+				LoginingActivity.this.finish();
 			}
 		};
 		timer.schedule(task, 5000);
