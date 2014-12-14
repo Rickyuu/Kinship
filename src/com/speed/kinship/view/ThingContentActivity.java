@@ -45,16 +45,16 @@ public class ThingContentActivity extends Activity {
 		title=(TextView) findViewById(R.id.ContentTitle);
 		time=(TextView) findViewById(R.id.ContentTime);
 		content=(TextView) findViewById(R.id.thingContent);
+		
 		delete=(Button) findViewById(R.id.delete);
-		
-		
-		
+	
 		imageShow=(ImageView) findViewById(R.id.thingImageShow);
 		
 		
 		title.setText(getIntent().getStringExtra("title"));
 		time.setText(getIntent().getStringExtra("time"));
 		content.setText(getIntent().getStringExtra("content"));
+		userId=Integer.parseInt(getIntent().getStringExtra("userId"));
 		
 		byte[] myPicByte=getIntent().getByteArrayExtra("pic");
 		if(myPicByte!=null) {
@@ -72,6 +72,11 @@ public class ThingContentActivity extends Activity {
 		userName=intent.getStringExtra("userName");
 		position=intent.getStringExtra("position");
 		
+		if(ThingContentActivity.this.id==ThingContentActivity.this.userId) {
+			delete.setVisibility(View.VISIBLE);
+		} else {
+			delete.setVisibility(View.INVISIBLE);
+		}
 		
 		delete.setOnClickListener(new OnClickListener() {
 
