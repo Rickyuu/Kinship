@@ -364,6 +364,9 @@ public class ThingActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		
+		getThingAsyncTask getThing=new getThingAsyncTask(10,ThingActivity.this.identity,ThingActivity.this.userName);
+		getThing.execute( );
+		
 	}
 	
 	
@@ -491,6 +494,8 @@ public class ThingActivity extends Activity {
 			
 			// TODO Auto-generated method stub
 			//ArrayList<Thing> thiList=new ArrayList<Thing>();
+			thiList.clear();
+			mylist.clear();
 			thiList.addAll(result);
 			//mylist = new ArrayList<HashMap<String, Object>>();
 			for(int i=0;i<thiList.size();i++) {

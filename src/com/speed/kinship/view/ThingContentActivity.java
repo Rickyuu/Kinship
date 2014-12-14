@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ThingContentActivity extends Activity {
 	private TextView title;
@@ -77,8 +78,13 @@ public class ThingContentActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				deleteThingAsyncTask deleteThing=new deleteThingAsyncTask();
-				deleteThing.execute( );
+				if(ThingContentActivity.this.id==ThingContentActivity.this.userId) {
+					deleteThingAsyncTask deleteThing=new deleteThingAsyncTask();
+					deleteThing.execute( );
+				} else {
+					Toast.makeText(ThingContentActivity.this, "You are not authorized!",Toast.LENGTH_SHORT ).show();
+				}
+				
 				
 			}
 			
@@ -89,6 +95,7 @@ public class ThingContentActivity extends Activity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO Auto-generated method stub
+			
 			ThingHandler thingHandler=new ThingHandlerImpl();
 			return thingHandler.deleteThing(ThingContentActivity.this.thingId);
 		}
