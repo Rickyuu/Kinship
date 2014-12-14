@@ -67,7 +67,7 @@ import android.widget.EditText;
 				// TODO Auto-generated method stub
 				String title=memoryTitleEdit.getText().toString();
 				//String time=memoryTimeEdit.getText().toString();
-				String dateChosen=String.valueOf(memoryDate.getYear())+"-"+String.valueOf(memoryDate.getMonth())+"-"+String.valueOf(memoryDate.getDayOfMonth());
+				String dateChosen=String.valueOf(memoryDate.getYear())+"-"+String.valueOf(memoryDate.getMonth()+1)+"-"+String.valueOf(memoryDate.getDayOfMonth());
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				Date date=null;
 				try {
