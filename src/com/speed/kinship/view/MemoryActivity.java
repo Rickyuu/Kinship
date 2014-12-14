@@ -75,8 +75,8 @@ public class MemoryActivity extends Activity {
 		memoryList.addHeaderView(listFooter);
 		memoryList.setAdapter(mAdapter);
 		
-		getMemoryAsyncTask getMemory=new getMemoryAsyncTask();
-		getMemory.execute( );
+		//getMemoryAsyncTask getMemory=new getMemoryAsyncTask();
+		//getMemory.execute( );
 		
 		add.setOnClickListener(new OnClickListener() {
 
