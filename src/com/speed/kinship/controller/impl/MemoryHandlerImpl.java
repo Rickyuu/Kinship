@@ -32,11 +32,8 @@ public class MemoryHandlerImpl implements MemoryHandler {
 	@Override
 	public Memory addMemory(User user, Date time, String content) {
 		Arguments arguments = new Arguments();
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(time);
-		calendar.set(Calendar.YEAR, 2014);
 		arguments.addArgument("user", user);
-		arguments.addArgument("time", calendar.getTime());
+		arguments.addArgument("time", time);
 		arguments.addArgument("content", content);
 		MethodMessage methodMessage = new MethodMessage(Constants.ADD_MEMORY, arguments);
 		MessageHandler messageHandler = new MessageHandler();
