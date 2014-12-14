@@ -23,63 +23,73 @@ public class settingActivity extends Activity {
 	private EditText numberDad;
 	private EditText numberChi;
 	private Button confirm;
-	
+
 	private String username;
 	private String id;
 	private String identity;
-	
-	@Override 
-	public void onCreate(Bundle savedInstanceState){
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        setContentView(R.layout.setting);
-        
-        numberMom = (EditText) findViewById (R.id.phoneNum1);
-        numberDad = (EditText) findViewById (R.id.phoneNum2);
-        numberChi = (EditText) findViewById (R.id.phoneNum3);
-        confirm = (Button) findViewById (R.id.settingConfirm);
-        
-        Intent intent = getIntent();
-        Bundle b = intent.getExtras();
-        username = b.getString("userName");
-        id = b.getString("id");
-        identity = b.getString("identity");
-        
-        if(identity.equals("PARENT")){
-        	numberMom.setVisibility(View.GONE);
-        	numberDad.setVisibility(View.GONE);
-        }else{
-        	numberChi.setVisibility(View.GONE);
-        }
-        
-        confirm.setOnClickListener(new OnClickListener(){
-        	
+		setContentView(R.layout.setting);
+
+		numberMom = (EditText) findViewById(R.id.phoneNum1);
+		numberDad = (EditText) findViewById(R.id.phoneNum2);
+		numberChi = (EditText) findViewById(R.id.phoneNum3);
+		confirm = (Button) findViewById(R.id.settingConfirm);
+
+		Intent intent = getIntent();
+		Bundle b = intent.getExtras();
+		username = b.getString("userName");
+		id = b.getString("id");
+		identity = b.getString("identity");
+
+		SharedPreferences file = getSharedPreferences("kinship_setting" + id,
+				Context.MODE_PRIVATE);
+		String mom = file.getString("mother", "");
+		String dad = file.getString("father", "");
+		String chi = file.getString("child", "");
+
+		// editText2.setText(str1.toCharArray(), 0, str1.length());
+
+		if (identity.equals("PARENT")) {
+			numberMom.setVisibility(View.GONE);
+			numberDad.setVisibility(View.GONE);
+			numberChi.setText(chi.toCharArray(), 0, chi.length());
+		} else {
+			numberChi.setVisibility(View.GONE);
+			numberMom.setText(mom.toCharArray(), 0, mom.length());
+			numberDad.setText(dad.toCharArray(), 0, dad.length());
+		}
+
+		confirm.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				String momPhone = new String(numberMom.getText().toString());
 				String dadPhone = new String(numberDad.getText().toString());
 				String chiPhone = new String(numberChi.getText().toString());
-				if(momPhone.isEmpty() && dadPhone.isEmpty() && chiPhone.isEmpty()){
-					Toast toast = Toast.makeText(getApplicationContext(), "You cannot set empty phone numbers.", Toast.LENGTH_SHORT);
-					toast.setGravity(Gravity.CENTER, 0, 0);
-					toast.show();
-				}else{
-					SharedPreferences file = getSharedPreferences("kinship_setting"+id, Context.MODE_PRIVATE);
-					Editor editor = file.edit();
-					editor.putString("mother", momPhone);
-					editor.putString("father", dadPhone);
-					editor.putString("child", chiPhone);
-					editor.commit();
-					settingActivity.this.finish();
-					
-					/*SystemClock.sleep(1000);
-					file = getSharedPreferences("kinship_setting"+id, Context.MODE_PRIVATE);
-					String mom = file.getString("mother", "");
-					Log.e("result", mom);*/
-				}
+
+				SharedPreferences file = getSharedPreferences("kinship_setting"
+						+ id, Context.MODE_PRIVATE);
+				Editor editor = file.edit();
+				editor.putString("mother", momPhone);
+				editor.putString("father", dadPhone);
+				editor.putString("child", chiPhone);
+				editor.commit();
+				settingActivity.this.finish();
+
+				/*
+				 * SystemClock.sleep(1000); file =
+				 * getSharedPreferences("kinship_setting"+id,
+				 * Context.MODE_PRIVATE); String mom = file.getString("mother",
+				 * ""); Log.e("result", mom);
+				 */
+
 				settingActivity.this.finish();
 			}
-			
-        });
-        
+
+		});
+
 	}
 }

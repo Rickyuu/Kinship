@@ -30,6 +30,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CallLog;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -68,6 +69,15 @@ public class LoginingActivity extends Activity {
 		String mom = file.getString("mother", "");
 		String dad = file.getString("father", "");
 		String chi = file.getString("child", "");
+		if(mom != null) {
+			Log.i("phoneMe", "mom"+mom+"mom");
+		}
+		if(dad != null) {
+			Log.i("phoneMe", "dad"+dad+"dad");
+		}
+		if(chi != null) {
+			Log.i("phoneMe", "chi"+chi+"chi");
+		}
 		
 		if(identity.equals("PARENT")) {
 			phoneNum=chi;
@@ -166,7 +176,7 @@ public class LoginingActivity extends Activity {
     					DadflagOpposite=false;
     				}
                 }
-                if((phoneDad!="")&&(phoneMum!="")) {
+                if(!phoneDad.equals("") && !phoneMum.equals("")) {
                 	if((Momflag==false)&&(Dadflag==false)&&(DadflagOpposite==false)&&(MomflagOpposite==false)) {
                     	if(tempMom.compareTo(tempMomOpposite)>0) {
                     		lastMum=tempMom;
@@ -183,7 +193,7 @@ public class LoginingActivity extends Activity {
                     	break;
                     }
                 }
-                if((phoneDad=="")&&(phoneMum!="")) {
+                if(phoneDad.equals("") && !phoneMum.equals("")) {
                 	if((Momflag==false)&&(MomflagOpposite==false)) {
                 		if(tempMom.compareTo(tempMomOpposite)>0) {
                     		lastMum=tempMom;
@@ -195,7 +205,7 @@ public class LoginingActivity extends Activity {
                 	}
                 	
                 }
-                if((phoneDad!="")&&(phoneMum=="")) {
+                if(!phoneDad.equals("") && phoneMum.equals("")) {
                 	if((Dadflag==false)&&(DadflagOpposite==false)) {
                 		if(tempDad.compareTo(tempDadOpposite)>0) {
                     		lastDad=tempDad;
