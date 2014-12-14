@@ -291,6 +291,7 @@ public class MemoryActivity extends Activity {
 				hm.put("content", temp.getContent());
 				hm.put("id", String.valueOf(temp.getId()));
 				hm.put("username", temp.getCreator().getUserName());
+				hm.put("creatorId", String.valueOf(temp.getCreator().getId()));
 				hm.put("time", str);
 				myList.add(hm);
 			}
@@ -333,6 +334,7 @@ private class refreshMemoryAsyncTask extends AsyncTask<Void,Void,List<Memory>> {
 				hm.put("content", temp.getContent());
 				hm.put("id", String.valueOf(temp.getId()));
 				hm.put("username", temp.getCreator().getUserName());
+				hm.put("creatorId", String.valueOf(temp.getCreator().getId()));
 				hm.put("time", str);
 				myList.add(hm);
 			}
@@ -392,6 +394,12 @@ private class refreshMemoryAsyncTask extends AsyncTask<Void,Void,List<Memory>> {
 			}
 			holder.Content.setText(myList.get(position).get("content"));
 			holder.Time.setText(myList.get(position).get("time"));
+			if(myList.get(position).get("creatorId").equals(String.valueOf(MemoryActivity.this.id))) {
+				holder.Delete.setVisibility(View.VISIBLE);
+			} else {
+				holder.Delete.setVisibility(View.INVISIBLE);
+			}
+			
 			final int deleteId=Integer.parseInt(myList.get(position).get("id"));
 			final int listPosition=position;
 			holder.Delete.setOnClickListener(new OnClickListener() {

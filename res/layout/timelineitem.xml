@@ -74,6 +74,7 @@
             android:maxEms="7"
             android:singleLine="true"
             android:text="time"
+            android:gravity="right"
             android:textSize="20sp" />
   
     </RelativeLayout>  
