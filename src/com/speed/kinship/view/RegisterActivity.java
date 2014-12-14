@@ -147,6 +147,7 @@ public class RegisterActivity extends Activity {
 				intent.putExtra("id", String.valueOf(result.getId()));
 				intent.setClass(RegisterActivity.this, LoginingActivity.class);
 				startActivity(intent);
+				RegisterActivity.this.finish();
 				Log.i("Login", "Succeed!"+result.getId());
 				
 			} else {
