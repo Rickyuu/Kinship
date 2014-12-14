@@ -78,6 +78,20 @@ public class MemoryActivity extends Activity {
 		//getMemoryAsyncTask getMemory=new getMemoryAsyncTask();
 		//getMemory.execute( );
 		
+		setting.setOnClickListener(new OnClickListener(){
+        	//Ìø×ªµ½StateCreate
+        	@Override
+        	public void onClick(View v){
+        		Bundle data = new Bundle();
+        		data.putString("userName",userName);
+        		data.putString("id", String.valueOf(id));
+        		data.putString("identity", identity);
+        		Intent intent = new Intent(MemoryActivity.this, settingActivity.class);
+        		intent.putExtras(data);
+        		startActivity(intent);
+        	}
+        });
+		
 		add.setOnClickListener(new OnClickListener() {
 
 			@Override
