@@ -87,11 +87,6 @@ public class ThingActivity extends Activity {
 		thingList.setAdapter(myAdapter);
 		
 		
-		
-		getThingAsyncTask getThing=new getThingAsyncTask(10,ThingActivity.this.identity,ThingActivity.this.userName);
-		getThing.execute( );
-		
-		
 		setting.setOnClickListener(new OnClickListener() {
 
 			@Override
