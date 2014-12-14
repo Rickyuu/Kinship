@@ -62,19 +62,20 @@
             android:layout_alignParentLeft="true"  
             android:layout_centerVertical="true"  
             android:layout_marginLeft="5dp"  
-            android:src="@drawable/bg_green_circle_smic" />  
-  
+            android:src="@drawable/bg_green_circle_smic" />
+
         <TextView
             android:id="@+id/timeLineTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@+id/image_1"
             android:ellipsize="end"
+            android:gravity="left"
             android:maxEms="7"
             android:singleLine="true"
             android:text="time"
-            android:gravity="right"
             android:textSize="20sp" />
   
     </RelativeLayout>  
