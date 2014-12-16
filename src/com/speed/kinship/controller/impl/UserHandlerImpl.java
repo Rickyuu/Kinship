@@ -1,5 +1,9 @@
 package com.speed.kinship.controller.impl;
-
+/*# CSIT 6000B    
+ *# Liang You      20229016   yliangao@connect.ust.hk
+ *# Zhan Xiaojun   20244793   xzhanab@connect.ust.hk
+ *# Tao Ye         20225905   ytaoac@connect.ust.hk  
+ * */ 
 import com.speed.kinship.controller.UserHandler;
 import com.speed.kinship.model.Identity;
 import com.speed.kinship.model.User;

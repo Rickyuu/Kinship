@@ -1,5 +1,9 @@
 package com.speed.kinship.view;
-
+/*# CSIT 6000B    
+ *# Liang You      20229016   yliangao@connect.ust.hk
+ *# Zhan Xiaojun   20244793   xzhanab@connect.ust.hk
+ *# Tao Ye         20225905   ytaoac@connect.ust.hk  
+ * */ 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -50,10 +54,18 @@ public class RegisterActivity extends Activity {
 				// TODO Auto-generated method stub
 				account=newAccount.getText().toString();
 				password=newPassword.getText().toString();
-				RegisterAsyncTask asynctask=new RegisterAsyncTask(account,password,Identity.PARENT);
-				asynctask.execute( );
-				LoginAsyncTask loginAsyncTask=new LoginAsyncTask(account,password,identity);
-				loginAsyncTask.execute( );
+				if(account.isEmpty()) {
+					Toast.makeText(RegisterActivity.this, "Illegal username!", Toast.LENGTH_SHORT).show();
+				} else if(password.isEmpty()) {
+					Toast.makeText(RegisterActivity.this, "Illegal password!", Toast.LENGTH_SHORT).show();
+				}
+				else {
+					RegisterAsyncTask asynctask=new RegisterAsyncTask(account,password,Identity.PARENT);
+					asynctask.execute( );
+					LoginAsyncTask loginAsyncTask=new LoginAsyncTask(account,password,identity);
+					loginAsyncTask.execute( );
+				}
+				
 				
 			}
 			
@@ -88,6 +100,7 @@ public class RegisterActivity extends Activity {
 			// TODO Auto-generated method stub
 			UserHandler userhandler=new UserHandlerImpl();
 			return userhandler.register(username, password, identity);
+			
 		}
 
 
@@ -98,7 +111,7 @@ public class RegisterActivity extends Activity {
 				Log.i("Register", "Success!");
 				
 			} else {
-				Toast.makeText(RegisterActivity.this, "The username has already exist!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(RegisterActivity.this, "Illegal Account!!", Toast.LENGTH_SHORT).show();
 				Log.i("Register", "Fail!");
 			}
 		}

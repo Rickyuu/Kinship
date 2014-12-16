@@ -1,5 +1,9 @@
 package com.speed.kinship.util;
-
+/*# CSIT 6000B    
+ *# Liang You      20229016   yliangao@connect.ust.hk
+ *# Zhan Xiaojun   20244793   xzhanab@connect.ust.hk
+ *# Tao Ye         20225905   ytaoac@connect.ust.hk  
+ * */ 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
